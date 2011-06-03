@@ -18,3 +18,5 @@ set expandtab
 "folding settings
 set foldmethod=indent
 set foldlevel=1
+
+call pathogen#runtime_append_all_bundles()
