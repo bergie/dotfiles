@@ -1,6 +1,12 @@
+set nocompatible
+
+"UI
 colors zenburn
 syntax on
 set number
+set guioptions-=m
+set guioptions-=T
+
 set showmatch
 set showmode
 
@@ -8,6 +14,9 @@ set ruler
 
 set incsearch
 set hlsearch
+
+"Indentation
+set autoindent
 
 " Tab behaviour
 set tabstop=4
