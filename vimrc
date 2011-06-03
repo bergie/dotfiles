@@ -10,6 +10,14 @@ set showmode
 
 set ruler
 
+" Always be in the directory of the file
+set autochdir
+
+" Backups in one place
+set backup
+set backupdir=~/.vim/backup
+set directory=~/.vim/tmp
+
 " Nicer searching
 set incsearch
 set hlsearch
@@ -30,3 +38,6 @@ set foldlevel=1
 
 " Load additional modules
 call pathogen#runtime_append_all_bundles()
+
+" Language-specific configs
+let coffee_compile_on_save = 1
