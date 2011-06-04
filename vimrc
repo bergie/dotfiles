@@ -11,7 +11,7 @@ set showmode
 set ruler
 
 " Always be in the directory of the file
-"set autochdir
+"set autochdir We use rooter now
 
 " Backups in one place
 set backup
