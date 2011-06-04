@@ -10,6 +10,11 @@ set showmode
 
 set ruler
 
+" Keyboard mappings, Ctrl-X, C, V
+vnoremap <C-X> "+x
+vnoremap <C-C> "+y
+map <C-V> "+gP
+
 " Always be in the directory of the file
 "set autochdir We use rooter now
 
