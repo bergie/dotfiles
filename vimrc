@@ -38,8 +38,8 @@ set softtabstop=4
 set expandtab
 
 " Folding settings
-set foldmethod=indent
-set foldlevel=1
+"set foldmethod=indent
+"set foldlevel=1
 
 " Load additional modules
 call pathogen#runtime_append_all_bundles()
