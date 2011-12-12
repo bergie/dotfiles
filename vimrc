@@ -1,11 +1,24 @@
 set nocompatible
+syntax enable
+set encoding=utf-8
+" Display incomplete commands
+set showcmd
+filetype plugin indent on
+
+" Whitespace handling
+set nowrap
+set tabstop=2 shiftwidth=2  " Tab is two spaces
+set expandtab               " Use spaces, not tabs
+set backspace=indent,eol,start " Backspace through everything
+
+" Indentation
+set autoindent
 
 " UI
 colors zenburn
-syntax on
-set number
-set guioptions-=m
-set guioptions-=T
+set number                  " Line numbering"
+set guioptions-=m           " Remove menu in GUI
+set guioptions-=T           " Remove toolbar in GUI
 set showmode
 
 set ruler
@@ -24,22 +37,19 @@ set backupdir=~/.vim/backup
 set directory=~/.vim/tmp
 
 " Nicer searching
-set incsearch
-set hlsearch
-set showmatch
+set incsearch               " Incremental searching
+set hlsearch                " Highlight matches
+set showmatch               " Show match numbers
+set ignorecase              " Search case-insensitive
+set smartcase               " ...except when something is capitalized
 
-" Indentation
-set autoindent
+" File navigation
+let mapleader=","           " Use comma as <leader>
 
-" Tab behaviour
-set tabstop=4
-set shiftwidth=4
-set softtabstop=4
-set expandtab
-
-" Folding settings
-"set foldmethod=indent
-"set foldlevel=1
+" Search files in project with ,f
+map <leader>f :CommandTFlush<cr>\|:CommandT<cr>
+" Search files in directory with ,F
+map <leader>F :CommandTFlush<cr>\|:CommandT %%<cr>
 
 " Load additional modules
 call pathogen#runtime_append_all_bundles()
