@@ -6,7 +6,6 @@ set showcmd
 filetype plugin indent on
 
 " Whitespace handling
-set nowrap
 set tabstop=2 shiftwidth=2  " Tab is two spaces
 set expandtab               " Use spaces, not tabs
 set backspace=indent,eol,start " Backspace through everything
