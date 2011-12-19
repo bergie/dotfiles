@@ -14,7 +14,7 @@ set backspace=indent,eol,start " Backspace through everything
 set autoindent
 
 " UI
-set t_Co=256
+"set t_Co=256
 colors zenburn
 set number                  " Line numbering"
 set guioptions-=m           " Remove menu in GUI
