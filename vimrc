@@ -52,7 +52,7 @@ map <leader>f :CommandTFlush<cr>\|:CommandT<cr>
 map <leader>F :CommandTFlush<cr>\|:CommandT %%<cr>
 
 " Load additional modules
-call pathogen#runtime_append_all_bundles()
+call pathogen#infect()
 
 " Language-specific configs
 let coffee_compile_on_save = 1
