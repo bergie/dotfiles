@@ -10,3 +10,6 @@
 [submodule "bundle/vim-markdown"]
 	path = bundle/vim-markdown
 	url = https://github.com/tpope/vim-markdown.git
+[submodule "bundle/vim-json"]
+	path = bundle/vim-json
+	url = https://github.com/leshill/vim-json.git
