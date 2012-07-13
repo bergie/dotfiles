@@ -1,5 +1,5 @@
-My VIM configuration
-====================
+My Unix dotfiles
+================
 
 Mostly used for CoffeeScript and PHP development.
 
