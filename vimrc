@@ -21,6 +21,10 @@ set guioptions-=m           " Remove menu in GUI
 set guioptions-=T           " Remove toolbar in GUI
 set showmode
 
+" Visualize tabs and linebreaks
+set list
+set listchars=tab:▸\ ,eol:¬
+
 set ruler
 
 " Keyboard mappings, Ctrl-X, C, V
