@@ -1,0 +1,5 @@
+[user]
+	name = Henri Bergius
+	email = henri.bergius@iki.fi
+[diff "odf"]
+  textconv = odt2txt
