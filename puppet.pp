@@ -10,3 +10,7 @@ file { "/home/${id}/.gitconfig":
  ensure => link,
  target => "/home/${id}/Projects/dotfiles/gitconfig",
 }
+file { "/home/${id}/.zshrc":
+ ensure => link,
+ target => "/home/${id}/Projects/dotfiles/zshrc",
+}
