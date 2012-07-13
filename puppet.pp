@@ -14,3 +14,7 @@ file { "/home/${id}/.zshrc":
  ensure => link,
  target => "/home/${id}/Projects/dotfiles/zshrc",
 }
+file { "/home/${id}/.tmux.conf":
+  ensure => link,
+  target => "/home/${id}/Projects/dotfiles/tmux.conf",
+}
