@@ -32,9 +32,9 @@ map <C-V> "+gP
 "set autochdir We use rooter now
 
 " Backups in one place
-set backup
-set backupdir=~/.vim/backup
-set directory=~/.vim/tmp
+set nobackup
+set nowritebackup
+set noswapfile
 
 " Nicer searching
 set incsearch               " Incremental searching
