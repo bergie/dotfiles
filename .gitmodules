@@ -1,15 +1,15 @@
 [submodule "bundle/vim-coffee-script"]
-	path = bundle/vim-coffee-script
+	path = vim/bundle/vim-coffee-script
 	url = https://github.com/kchmck/vim-coffee-script.git
 [submodule "bundle/vim-rooter"]
-	path = bundle/vim-rooter
+	path = vim/bundle/vim-rooter
 	url = https://github.com/airblade/vim-rooter.git
 [submodule "bundle/command-t"]
-	path = bundle/command-t
+	path = vim/bundle/command-t
 	url = git://git.wincent.com/command-t.git
 [submodule "bundle/vim-markdown"]
-	path = bundle/vim-markdown
+	path = vim/bundle/vim-markdown
 	url = https://github.com/tpope/vim-markdown.git
 [submodule "bundle/vim-json"]
-	path = bundle/vim-json
+	path = vim/bundle/vim-json
 	url = https://github.com/leshill/vim-json.git
