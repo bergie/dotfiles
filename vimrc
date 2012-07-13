@@ -51,6 +51,11 @@ map <leader>f :CommandTFlush<cr>\|:CommandT<cr>
 " Search files in directory with ,F
 map <leader>F :CommandTFlush<cr>\|:CommandT %%<cr>
 
+" Switch between relative and absolute line numbers depending on mode
+set relativenumber
+autocmd InsertEnter * :set number
+autocmd InsertLeave * :set relativenumber
+
 " Load additional modules
 call pathogen#infect()
 
