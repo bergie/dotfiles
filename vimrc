@@ -5,6 +5,22 @@ set encoding=utf-8
 set showcmd
 filetype plugin indent on
 
+"Reasonable line movement"
+nnoremap j gj
+nnoremap k gk
+vnoremap j gj
+vnoremap k gk
+
+" Disable arrow keys
+nnoremap <up> <nop>
+nnoremap <down> <nop>
+nnoremap <left> <nop>
+nnoremap <right> <nop>
+inoremap <up> <nop>
+inoremap <down> <nop>
+inoremap <left> <nop>
+inoremap <right> <nop>
+
 " Whitespace handling
 set tabstop=2 shiftwidth=2  " Tab is two spaces
 set expandtab               " Use spaces, not tabs
