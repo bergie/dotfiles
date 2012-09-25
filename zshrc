@@ -37,3 +37,7 @@ source $ZSH/oh-my-zsh.sh
 # Customize to your needs...
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/games
 export NODE_PATH=/usr/local/lib/node_modules
+
+# Use syntax highlighting in less. Uses the source-highlight package
+export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
+export LESS=' -R '
