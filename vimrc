@@ -21,6 +21,9 @@ inoremap <down> <nop>
 inoremap <left> <nop>
 inoremap <right> <nop>
 
+" Load additional modules
+call pathogen#infect()
+
 " Whitespace handling
 set tabstop=2 shiftwidth=2  " Tab is two spaces
 set expandtab               " Use spaces, not tabs
@@ -31,7 +34,8 @@ set autoindent
 
 " UI
 set t_Co=256
-colors zenburn
+set background=dark
+colorscheme solarized
 set number                  " Line numbering"
 set guioptions-=m           " Remove menu in GUI
 set guioptions-=T           " Remove toolbar in GUI
@@ -75,9 +79,6 @@ map <leader>F :CommandTFlush<cr>\|:CommandT %%<cr>
 set relativenumber
 autocmd InsertEnter * :set number
 autocmd InsertLeave * :set relativenumber
-
-" Load additional modules
-call pathogen#infect()
 
 " Language-specific configs
 let coffee_compile_on_save = 1
