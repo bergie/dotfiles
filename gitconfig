@@ -3,3 +3,5 @@
 	email = henri.bergius@iki.fi
 [diff "odf"]
   textconv = odt2txt
+[color]
+	diff = true
