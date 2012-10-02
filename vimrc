@@ -35,7 +35,8 @@ set autoindent
 " UI
 set t_Co=256
 set background=dark
-colorscheme solarized
+" colorscheme solarized
+colors zenburn
 set number                  " Line numbering"
 set guioptions-=m           " Remove menu in GUI
 set guioptions-=T           " Remove toolbar in GUI
