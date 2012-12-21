@@ -11,6 +11,7 @@ ZSH_THEME="pygmalion"
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias tmux="tmux -2"
+alias nautilus="nautilus --no-desktop"
 
 # Set to this to use case-sensitive completion
 # CASE_SENSITIVE="true"
@@ -30,7 +31,7 @@ alias tmux="tmux -2"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git heroku)
+plugins=(git heroku vagrant)
 
 source $ZSH/oh-my-zsh.sh
 
