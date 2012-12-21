@@ -1,0 +1,6 @@
+background "#333333"
+decorations none
+dockapp_mode simple
+geometry 3x1+1600+0
+grow_gravity NE
+icon_gravity NE
