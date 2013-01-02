@@ -77,9 +77,9 @@ map <leader>f :CommandTFlush<cr>\|:CommandT<cr>
 map <leader>F :CommandTFlush<cr>\|:CommandT %%<cr>
 
 " Switch between relative and absolute line numbers depending on mode
-set relativenumber
-autocmd InsertEnter * :set number
-autocmd InsertLeave * :set relativenumber
+"set relativenumber
+"autocmd InsertEnter * :set number
+"autocmd InsertLeave * :set relativenumber
 
 " Language-specific configs
 let coffee_compile_on_save = 1
