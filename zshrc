@@ -36,5 +36,5 @@ plugins=(git heroku vagrant)
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
-export PATH=/usr/local/bin:/usr/bin:/bin:/usr/games
+export PATH=/usr/local/bin:/usr/bin:/bin:/usr/games:/usr/local/git/bin/:/sbin
 export NODE_PATH=/usr/local/lib/node_modules
