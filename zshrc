@@ -12,6 +12,7 @@ ZSH_THEME="pygmalion"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias tmux="tmux -2"
 alias nautilus="nautilus --no-desktop"
+alias vim="/Applications/MacVim.app/Contents/MacOS/Vim"
 
 # Set to this to use case-sensitive completion
 # CASE_SENSITIVE="true"
@@ -36,5 +37,11 @@ plugins=(git heroku vagrant)
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
-export PATH=/usr/local/bin:/usr/bin:/bin:/usr/games:/usr/local/git/bin/:/sbin
+export PATH=/usr/local/bin:/usr/bin:/bin:/usr/games:/usr/local/git/bin/:/sbin:/Applications/Xcode.app/Contents/Developer/usr/bin
 export NODE_PATH=/usr/local/lib/node_modules
+
+### Added by the Heroku Toolbelt
+export PATH="/usr/local/heroku/bin:$PATH"
+
+# UTF-8
+LC_CTYPE="en_US.UTF-8"
