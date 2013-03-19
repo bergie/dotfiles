@@ -11,11 +11,12 @@ nnoremap k gk
 vnoremap j gj
 vnoremap k gk
 
+" In Normal mode, Arrow keys switch windows
+nnoremap <up> <C-w><up>
+nnoremap <down> <C-w><down>
+nnoremap <left> <C-w><left>
+nnoremap <right> <C-w><right>
 " Disable arrow keys
-nnoremap <up> <nop>
-nnoremap <down> <nop>
-nnoremap <left> <nop>
-nnoremap <right> <nop>
 inoremap <up> <nop>
 inoremap <down> <nop>
 inoremap <left> <nop>
