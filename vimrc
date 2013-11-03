@@ -72,11 +72,6 @@ set smartcase               " ...except when something is capitalized
 " File navigation
 let mapleader=","           " Use comma as <leader>
 
-" Search files in project with ,f
-map <leader>f :CommandTFlush<cr>\|:CommandT<cr>
-" Search files in directory with ,F
-map <leader>F :CommandTFlush<cr>\|:CommandT %%<cr>
-
 " Switch between relative and absolute line numbers depending on mode
 "set relativenumber
 "autocmd InsertEnter * :set number
