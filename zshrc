@@ -45,3 +45,6 @@ export PATH="/usr/local/heroku/bin:$PATH"
 
 # UTF-8
 LC_CTYPE="en_US.UTF-8"
+
+# added by travis gem
+source /home/bergie/.travis/travis.sh
