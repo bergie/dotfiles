@@ -1,6 +1,9 @@
 set nocompatible
 syntax enable
 set encoding=utf-8
+set enc=utf-8
+set fileencoding=utf-8
+set fileencodings=ucs-bom,utf8,prc
 " Display incomplete commands
 set showcmd
 filetype plugin indent on
@@ -73,9 +76,9 @@ set smartcase               " ...except when something is capitalized
 let mapleader=","           " Use comma as <leader>
 
 " Switch between relative and absolute line numbers depending on mode
-"set relativenumber
-"autocmd InsertEnter * :set number
-"autocmd InsertLeave * :set relativenumber
+set relativenumber
+autocmd InsertEnter * :set number
+autocmd InsertLeave * :set relativenumber
 
 " Language-specific configs
 let coffee_compile_on_save = 1
