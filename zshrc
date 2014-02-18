@@ -12,7 +12,7 @@ ZSH_THEME="pygmalion"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias tmux="tmux -2"
 alias nautilus="nautilus --no-desktop"
-alias vim="/Applications/MacVim.app/Contents/MacOS/Vim"
+#alias vim="/Applications/MacVim.app/Contents/MacOS/Vim"
 
 # Set to this to use case-sensitive completion
 # CASE_SENSITIVE="true"
@@ -47,4 +47,4 @@ export PATH="/usr/local/heroku/bin:$PATH"
 LC_CTYPE="en_US.UTF-8"
 
 # added by travis gem
-source /home/bergie/.travis/travis.sh
+source $HOME/.travis/travis.sh
