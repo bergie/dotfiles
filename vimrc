@@ -40,6 +40,7 @@ set autoindent
 set t_Co=256
 set background=dark
 " colorscheme solarized
+" colors flowhub
 colors zenburn
 set number                  " Line numbering"
 set guioptions-=m           " Remove menu in GUI

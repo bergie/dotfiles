@@ -47,4 +47,9 @@ export PATH="/usr/local/heroku/bin:$PATH"
 LC_CTYPE="en_US.UTF-8"
 
 # added by travis gem
-source $HOME/.travis/travis.sh
+[ -f $HOME/.travis/travis.sh ] && source $HOME/.travis/travis.sh
+
+if [[ -s $HOME/google-cloud-sdk ]]; then
+  # The next line updates PATH for the Google Cloud SDK.
+  source $HOME/google-cloud-sdk/path.zsh.inc
+fi
