@@ -53,3 +53,5 @@ if [[ -s $HOME/google-cloud-sdk ]]; then
   # The next line updates PATH for the Google Cloud SDK.
   source $HOME/google-cloud-sdk/path.zsh.inc
 fi
+
+if [ "$TMUX" = "" ]; then tmux; fi
