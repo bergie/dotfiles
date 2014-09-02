@@ -54,4 +54,4 @@ if [[ -s $HOME/google-cloud-sdk ]]; then
   source $HOME/google-cloud-sdk/path.zsh.inc
 fi
 
-if [ "$TMUX" = "" ]; then tmux; fi
+if [ "$TMUX" = "" ]; then tmux attach; fi
