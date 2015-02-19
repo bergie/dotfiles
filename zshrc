@@ -55,3 +55,6 @@ if [[ -s $HOME/google-cloud-sdk ]]; then
 fi
 
 if [ "$TMUX" = "" ]; then tmux attach; fi
+
+# added by travis gem
+[ -f /home/bergie/.travis/travis.sh ] && source /home/bergie/.travis/travis.sh
