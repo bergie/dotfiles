@@ -40,3 +40,6 @@
 [submodule "vim/bundle/vim-fbp"]
 	path = vim/bundle/vim-fbp
 	url = git://github.com/ninegrid/vim-fbp.git
+[submodule "vim/bundle/vim-gss"]
+	path = vim/bundle/vim-gss
+	url = https://github.com/Hydrotoast/vim-gss.git
