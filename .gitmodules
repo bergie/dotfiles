@@ -43,3 +43,6 @@
 [submodule "vim/bundle/vim-gss"]
 	path = vim/bundle/vim-gss
 	url = https://github.com/Hydrotoast/vim-gss.git
+[submodule "vim/bundle/vim-apiblueprint"]
+	path = vim/bundle/vim-apiblueprint
+	url = https://github.com/kylef/apiblueprint.vim.git
