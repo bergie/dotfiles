@@ -5,5 +5,3 @@
   textconv = odt2txt
 [color]
 	diff = true
-[push]
-	default = simple
