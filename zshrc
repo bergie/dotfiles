@@ -58,3 +58,6 @@ if [ "$TMUX" = "" ]; then tmux attach; fi
 
 # added by travis gem
 [ -f /home/bergie/.travis/travis.sh ] && source /home/bergie/.travis/travis.sh
+
+export GOPATH=$HOME/.go
+PATH=$PATH:$GOPATH/bin
