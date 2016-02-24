@@ -58,6 +58,9 @@ vnoremap <C-X> "+x
 vnoremap <C-C> "+y
 map <C-V> "+gP
 
+" jj for escape
+imap jj <Esc>
+
 " Always be in the directory of the file
 "set autochdir We use rooter now
 
