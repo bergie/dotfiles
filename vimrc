@@ -86,3 +86,5 @@ autocmd InsertLeave * :set relativenumber
 
 " Language-specific configs
 let coffee_compile_on_save = 1
+
+let g:rooter_disable_map = 1
