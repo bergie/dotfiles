@@ -1,9 +1,6 @@
 [submodule "bundle/vim-coffee-script"]
 	path = vim/bundle/vim-coffee-script
 	url = https://github.com/kchmck/vim-coffee-script.git
-[submodule "bundle/vim-rooter"]
-	path = vim/bundle/vim-rooter
-	url = https://github.com/airblade/vim-rooter.git
 [submodule "bundle/vim-markdown"]
 	path = vim/bundle/vim-markdown
 	url = https://github.com/tpope/vim-markdown.git
