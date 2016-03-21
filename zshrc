@@ -12,6 +12,7 @@ ZSH_THEME="pygmalion"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias tmux="tmux -2"
 alias nautilus="nautilus --no-desktop"
+alias vi=vim
 #alias vim="/Applications/MacVim.app/Contents/MacOS/Vim"
 
 # Set to this to use case-sensitive completion
