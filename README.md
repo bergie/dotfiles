@@ -5,4 +5,18 @@ Mostly used for CoffeeScript and PHP development.
 
 ## Installation
 
-    $ puppet apply puppet.pp
+These dotfiles are easiest to deploy with [GNU Stow](https://www.gnu.org/software/stow/). Install it for the appropriate operating system:
+
+```term
+$ sudo apt-get install stow # Debian derivatives
+$ sudo pacman -S stow       # Arch
+$ brew install stow         # MacOS
+```
+
+Then apply the configuration bundles you want:
+
+```term
+$ stow zsh                  # zsh and tmux configuration
+$ stow git                  # git configuration
+$ stow vim                  # vim configuration
+```
