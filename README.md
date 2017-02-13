@@ -1,7 +1,7 @@
 My Unix dotfiles
 ================
 
-Mostly used for CoffeeScript and PHP development.
+Mostly used for Node.js and CoffeeScript development.
 
 ## Installation
 
