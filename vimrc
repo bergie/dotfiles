@@ -83,6 +83,3 @@ let mapleader=","           " Use comma as <leader>
 set relativenumber
 autocmd InsertEnter * :set number
 autocmd InsertLeave * :set relativenumber
-
-" Language-specific configs
-let coffee_compile_on_save = 1
