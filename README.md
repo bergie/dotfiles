@@ -20,3 +20,9 @@ $ stow zsh                  # zsh and tmux configuration
 $ stow git                  # git configuration
 $ stow vim                  # vim configuration
 ```
+
+For vim you'll also want to fetch the plugins:
+
+```term
+$ git submodule update --init
+```

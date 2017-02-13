@@ -1,27 +1,27 @@
-[submodule "bundle/vim-coffee-script"]
-	path = vim/bundle/vim-coffee-script
+[submodule "vim/.vim/bundle/vim-coffee-script"]
+	path = vim/.vim/bundle/vim-coffee-script
 	url = https://github.com/kchmck/vim-coffee-script.git
-[submodule "bundle/vim-markdown"]
-	path = vim/bundle/vim-markdown
+[submodule "vim/.vim/bundle/vim-markdown"]
+	path = vim/.vim/bundle/vim-markdown
 	url = https://github.com/tpope/vim-markdown.git
-[submodule "bundle/vim-json"]
-	path = vim/bundle/vim-json
+[submodule "vim/.vim/bundle/vim-json"]
+	path = vim/.vim/bundle/vim-json
 	url = https://github.com/leshill/vim-json.git
-[submodule "vim/bundle/syntastic"]
-	path = vim/bundle/syntastic
+[submodule "vim/.vim/bundle/syntastic"]
+	path = vim/.vim/bundle/syntastic
 	url = https://github.com/scrooloose/syntastic.git
-[submodule "vim/bundle/vim-css-color"]
-	path = vim/bundle/vim-css-color
+[submodule "vim/.vim/bundle/vim-css-color"]
+	path = vim/.vim/bundle/vim-css-color
 	url = https://github.com/ap/vim-css-color.git
-[submodule "vim/bundle/vim-powerline"]
-	path = vim/bundle/vim-powerline
+[submodule "vim/.vim/bundle/vim-powerline"]
+	path = vim/.vim/bundle/vim-powerline
 	url = https://github.com/Lokaltog/vim-powerline.git
-[submodule "vim/bundle/vim-fbp"]
-	path = vim/bundle/vim-fbp
-	url = git://github.com/ninegrid/vim-fbp.git
-[submodule "vim/bundle/vim-apiblueprint"]
-	path = vim/bundle/vim-apiblueprint
+[submodule "vim/.vim/bundle/vim-fbp"]
+	path = vim/.vim/bundle/vim-fbp
+	url = https://github.com/ninegrid/vim-fbp.git
+[submodule "vim/.vim/bundle/vim-apiblueprint"]
+	path = vim/.vim/bundle/vim-apiblueprint
 	url = https://github.com/kylef/apiblueprint.vim.git
-[submodule "vim/bundle/vim-ledger"]
-	path = vim/bundle/vim-ledger
+[submodule "vim/.vim/bundle/vim-ledger"]
+	path = vim/.vim/bundle/vim-ledger
 	url = https://github.com/ledger/vim-ledger.git
