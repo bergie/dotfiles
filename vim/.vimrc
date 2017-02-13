@@ -39,7 +39,6 @@ set autoindent
 " UI
 set t_Co=256
 set background=dark
-" colorscheme solarized
 " colors flowhub
 colors zenburn
 set number                  " Line numbering"
