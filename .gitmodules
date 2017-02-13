@@ -7,39 +7,18 @@
 [submodule "bundle/vim-json"]
 	path = vim/bundle/vim-json
 	url = https://github.com/leshill/vim-json.git
-[submodule "vim/bundle/vim-puppet"]
-	path = vim/bundle/vim-puppet
-	url = git://github.com/rodjek/vim-puppet.git
-[submodule "vim/bundle/vim-colors-solarized"]
-	path = vim/bundle/vim-colors-solarized
-	url = git://github.com/altercation/vim-colors-solarized.git
-[submodule "vim/bundle/vim-less"]
-	path = vim/bundle/vim-less
-	url = https://github.com/groenewege/vim-less.git
-[submodule "vim/bundle/vim-jade"]
-	path = vim/bundle/vim-jade
-	url = git://github.com/digitaltoad/vim-jade.git
 [submodule "vim/bundle/syntastic"]
 	path = vim/bundle/syntastic
 	url = https://github.com/scrooloose/syntastic.git
-[submodule "vim/bundle/vimroom"]
-	path = vim/bundle/vimroom
-	url = git://github.com/mikewest/vimroom.git
 [submodule "vim/bundle/vim-css-color"]
 	path = vim/bundle/vim-css-color
 	url = https://github.com/ap/vim-css-color.git
 [submodule "vim/bundle/vim-powerline"]
 	path = vim/bundle/vim-powerline
 	url = https://github.com/Lokaltog/vim-powerline.git
-[submodule "vim/bundle/ctrlp"]
-	path = vim/bundle/ctrlp
-	url = https://github.com/kien/ctrlp.vim.git
 [submodule "vim/bundle/vim-fbp"]
 	path = vim/bundle/vim-fbp
 	url = git://github.com/ninegrid/vim-fbp.git
-[submodule "vim/bundle/vim-gss"]
-	path = vim/bundle/vim-gss
-	url = https://github.com/Hydrotoast/vim-gss.git
 [submodule "vim/bundle/vim-apiblueprint"]
 	path = vim/bundle/vim-apiblueprint
 	url = https://github.com/kylef/apiblueprint.vim.git
