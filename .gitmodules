@@ -13,9 +13,6 @@
 [submodule "vim/.vim/bundle/vim-css-color"]
 	path = vim/.vim/bundle/vim-css-color
 	url = https://github.com/ap/vim-css-color.git
-[submodule "vim/.vim/bundle/vim-powerline"]
-	path = vim/.vim/bundle/vim-powerline
-	url = https://github.com/Lokaltog/vim-powerline.git
 [submodule "vim/.vim/bundle/vim-fbp"]
 	path = vim/.vim/bundle/vim-fbp
 	url = https://github.com/ninegrid/vim-fbp.git
