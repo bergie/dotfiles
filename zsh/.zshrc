@@ -13,6 +13,7 @@ ZSH_THEME="pygmalion"
 alias tmux="tmux -2"
 alias nautilus="nautilus --no-desktop"
 alias vi=vim
+alias journal="vim ~/Projects/journal/$(date +%Y-%m).md"
 #alias vim="/Applications/MacVim.app/Contents/MacOS/Vim"
 
 # Set to this to use case-sensitive completion
