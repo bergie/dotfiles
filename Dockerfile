@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y \
       tmux \
       vim \
       zsh \
+      ledger \
       mosquitto \
       mosquitto-clients
 
