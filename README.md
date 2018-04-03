@@ -8,14 +8,14 @@ Mostly used for Node.js and CoffeeScript development.
 There is a Docker image available for this setup. Run it with:
 
 ```shell
-docker run --name shell -it bergie/shell
+$ docker run --name shell -it bergie/shell
 ```
 
 ### Updating the container
 
 ```shell
-sudo docker rm -f shell
-docker run --name shell -it bergie/shell
+$ sudo docker rm -f shell
+$ docker run --name shell -it bergie/shell
 ```
 
 ## Installation
