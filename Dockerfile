@@ -16,6 +16,7 @@ RUN apt-get update && apt-get install -y \
       vim \
       zsh \
       ledger \
+      mosh \
       mosquitto \
       mosquitto-clients
 
