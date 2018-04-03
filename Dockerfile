@@ -25,6 +25,10 @@ COPY ./zsh/* /root/
 COPY ./vim/* /root/
 COPY ./git/* /root/
 
+# Install Node.js LTS
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
+RUN apt-get install -y nodejs
+
 # Set up volumes
 WORKDIR /projects
 VOLUME /projects
