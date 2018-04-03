@@ -16,18 +16,18 @@ RUN apt-get update && apt-get install -y \
       zsh \
       stow
 
+# Install Node.js LTS
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
+RUN apt-get install -y nodejs
+
 # Install oh-my-zsh
 RUN chsh -s /usr/bin/zsh
 RUN curl -L http://install.ohmyz.sh | sh || true
 
 # Set up dotfiles
 COPY ./zsh/* /root/
-COPY ./vim/* /root/
+COPY ./vim/ /root/
 COPY ./git/* /root/
-
-# Install Node.js LTS
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
-RUN apt-get install -y nodejs
 
 # Set up volumes
 WORKDIR /projects
