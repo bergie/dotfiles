@@ -7,7 +7,7 @@ services:
 - if [ "$TARGET" == "raspberrypi3" ]; then docker run --rm --privileged multiarch/qemu-user-static:register --reset; fi
 script:
 # Use different base image for ARM
-- if [ "$TARGET" == "raspberrypi3" ]; then sed -i 's/ubuntu:latest/resin\/rpi-raspbian:latest/' Dockerfile; fi
+- if [ "$TARGET" == "raspberrypi3" ]; then sed -i 's/ubuntu:latest/cyrhenry\/rpi-ubuntu:xenial/' Dockerfile; fi
 # Build the Docker image
 - docker build -t $DOCKER_IMAGE -f Dockerfile .
 deploy:
