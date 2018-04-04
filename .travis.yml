@@ -2,8 +2,14 @@ language: node_js
 node_js: lts/*
 services:
 - docker
+- docker
+# Prepare cross-compiling environment if targeting ARM
+- if [ "$TARGET" == "raspberrypi3" ]; then docker run --rm --privileged multiarch/qemu-user-static:register --reset; fi
 script:
-- docker build -t bergie/shell ./
+# Use different base image for ARM
+- if [ "$TARGET" == "raspberrypi3" ]; then sed -i 's/ubuntu:latest/resin\/rpi-raspbian:latest/' Dockerfile; fi
+# Build the Docker image
+- docker build -t $DOCKER_IMAGE -f Dockerfile .
 deploy:
   -
     provider: script
@@ -23,3 +29,7 @@ notifications:
   email:
     on_success: never
     on_failure: always
+matrix:
+  include:
+  - env: TARGET=x86 DOCKER_IMAGE=bergie/shell
+  - env: TARGET=raspberrypi3 DOCKER_IMAGE=bergie/rpi-shell

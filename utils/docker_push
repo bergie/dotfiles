@@ -1,6 +1,6 @@
 #!/bin/bash
 docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
 if [ $TRAVIS_TAG ]; then
-  docker tag bergie/shell bergie/shell:$TRAVIS_TAG
+  docker tag $DOCKER_IMAGE $DOCKER_IMAGE:$TRAVIS_TAG
 fi
-docker push bergie/shell
+docker push $DOCKER_IMAGE
