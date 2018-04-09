@@ -46,6 +46,9 @@ set guioptions-=m           " Remove menu in GUI
 set guioptions-=T           " Remove toolbar in GUI
 set showmode
 
+" Style vertical splits
+set fillchars+=vert:\ 
+
 " Visualize tabs and linebreaks
 set list
 set listchars=tab:▸\ ,eol:¬
