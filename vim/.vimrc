@@ -50,6 +50,17 @@ set showmode
 set list
 set listchars=tab:▸\ ,eol:¬
 
+" Nicer visualization for linting errors and warnings
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let g:ale_sign_error = "◉"
+let g:ale_sign_warning = '•'
+highlight link ALEErrorSign    Error
+highlight link ALEWarningSign  Warning
+
+" Improve NerdTree looks
+let NERDTreeMinimalUI = 1
+let NERDTreeDirArrows = 1
+
 set ruler
 
 " Keyboard mappings, Ctrl-X, C, V
