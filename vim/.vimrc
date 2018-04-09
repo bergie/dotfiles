@@ -82,3 +82,9 @@ let mapleader=","           " Use comma as <leader>
 set relativenumber
 autocmd InsertEnter * :set number
 autocmd InsertLeave * :set relativenumber
+
+" Open NerdTree on start-up if given a directory path
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
+" Ctrl-N for opening/closing NerdTree
+map <C-n> :NERDTreeToggle<CR>
