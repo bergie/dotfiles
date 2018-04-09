@@ -7,9 +7,6 @@
 [submodule "vim/.vim/bundle/vim-json"]
 	path = vim/.vim/bundle/vim-json
 	url = https://github.com/leshill/vim-json.git
-[submodule "vim/.vim/bundle/syntastic"]
-	path = vim/.vim/bundle/syntastic
-	url = https://github.com/scrooloose/syntastic.git
 [submodule "vim/.vim/bundle/vim-css-color"]
 	path = vim/.vim/bundle/vim-css-color
 	url = https://github.com/ap/vim-css-color.git
@@ -22,3 +19,6 @@
 [submodule "vim/.vim/bundle/vim-ledger"]
 	path = vim/.vim/bundle/vim-ledger
 	url = https://github.com/ledger/vim-ledger.git
+[submodule "vim/.vim/bundle/ale"]
+	path = vim/.vim/bundle/ale
+	url = https://github.com/w0rp/ale.git
