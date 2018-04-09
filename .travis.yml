@@ -32,4 +32,3 @@ notifications:
 matrix:
   include:
   - env: TARGET=x86 DOCKER_IMAGE=bergie/shell
-  - env: TARGET=raspberrypi3 DOCKER_IMAGE=bergie/rpi-shell
