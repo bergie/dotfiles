@@ -101,3 +101,5 @@ autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in
 map <C-n> :NERDTreeToggle<CR>
 " Close NerdTree automatically after opening a file
 let NERDTreeQuitOnOpen = 1
+" Show dotfiles by default
+let NERDTreeShowHidden=1
