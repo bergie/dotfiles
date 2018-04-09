@@ -13,9 +13,6 @@
 [submodule "vim/.vim/bundle/vim-fbp"]
 	path = vim/.vim/bundle/vim-fbp
 	url = https://github.com/ninegrid/vim-fbp.git
-[submodule "vim/.vim/bundle/vim-apiblueprint"]
-	path = vim/.vim/bundle/vim-apiblueprint
-	url = https://github.com/kylef/apiblueprint.vim.git
 [submodule "vim/.vim/bundle/vim-ledger"]
 	path = vim/.vim/bundle/vim-ledger
 	url = https://github.com/ledger/vim-ledger.git
