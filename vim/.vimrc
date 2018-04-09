@@ -64,6 +64,10 @@ highlight link ALEWarningSign  Warning
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
 
+" Improve Airline status bar
+let g:airline_theme='zenburn'
+let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
+
 set ruler
 
 " Keyboard mappings, Ctrl-X, C, V
