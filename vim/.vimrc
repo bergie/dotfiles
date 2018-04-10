@@ -8,6 +8,9 @@ set fileencodings=ucs-bom,utf8,prc
 set showcmd
 filetype plugin indent on
 
+" Disable folding by default
+set nofoldenable
+
 "Reasonable line movement"
 nnoremap j gj
 nnoremap k gk
