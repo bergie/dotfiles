@@ -25,9 +25,6 @@ inoremap <down> <nop>
 inoremap <left> <nop>
 inoremap <right> <nop>
 
-" Load additional modules
-call pathogen#infect()
-
 " Whitespace handling
 set tabstop=2 shiftwidth=2  " Tab is two spaces
 set expandtab               " Use spaces, not tabs
