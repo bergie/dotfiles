@@ -28,3 +28,6 @@
 [submodule "vim/.vim/bundle/vim-airline-themes"]
 	path = vim/.vim/pack/bergie/start/vim-airline-themes
 	url = https://github.com/vim-airline/vim-airline-themes
+[submodule "vim/.vim/pack/bergie/start/vim-fugitive"]
+	path = vim/.vim/pack/bergie/start/vim-fugitive
+	url = https://github.com/tpope/vim-fugitive.git
