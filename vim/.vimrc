@@ -17,12 +17,12 @@ nnoremap k gk
 vnoremap j gj
 vnoremap k gk
 
-" In Normal mode, Arrow keys switch windows
+" In Normal mode, arrow keys switch windows
 nnoremap <up> <C-w><up>
 nnoremap <down> <C-w><down>
 nnoremap <left> <C-w><left>
 nnoremap <right> <C-w><right>
-" Disable arrow keys
+" In Insert mode, disable arrow keys
 inoremap <up> <nop>
 inoremap <down> <nop>
 inoremap <left> <nop>
@@ -67,6 +67,7 @@ let NERDTreeDirArrows = 1
 " Improve Airline status bar
 let g:airline_theme='zenburn'
 let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
+let g:airline_powerline_fonts = 1
 
 set ruler
 
