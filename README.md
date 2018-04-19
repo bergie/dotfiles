@@ -1,24 +1,24 @@
 My Unix dotfiles
 ================
 
-Mostly used for Node.js and CoffeeScript development.
+Mostly used for Node.js and IoT development.
 
 ## Running via Docker
 
 There is a Docker image available for this setup. Run it with:
 
 ```shell
-$ docker run --name shell -it bergie/shell
+$ docker run -v ~/Projects:/projects -v workstation:/root -v ~/.ssh:/keys --name workstation --rm -it bergie/shell
 ```
 
 ### Updating the container
 
 ```shell
-$ sudo docker rm -f shell
-$ docker run --name shell -it bergie/shell
+$ docker volume rm workstation && docker volume create workstation
+$ docker pull bergie/shell
 ```
 
-## Installation
+## Installation on host
 
 These dotfiles are easiest to deploy with [GNU Stow](https://www.gnu.org/software/stow/). Install it for the appropriate operating system:
 
