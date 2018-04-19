@@ -34,6 +34,9 @@ RUN apt-add-repository ppa:ansible/ansible && apt-get update && apt-get install 
 # Install Travis CLI
 RUN gem install travis --no-rdoc --no-ri
 
+# Install Heroku toolbelt
+RUN wget -qO- https://cli-assets.heroku.com/install-ubuntu.sh | sh
+
 # Install oh-my-zsh
 RUN chsh -s /usr/bin/zsh
 RUN curl -L http://install.ohmyz.sh | sh || true
