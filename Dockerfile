@@ -8,6 +8,7 @@ ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 # Common packages
 RUN apt-get update && apt-get install -y \
       build-essential \
+      tzdata \
       curl \
       git \
       wget \
@@ -26,6 +27,10 @@ RUN apt-get install -y nodejs
 # Install oh-my-zsh
 RUN chsh -s /usr/bin/zsh
 RUN curl -L http://install.ohmyz.sh | sh || true
+
+# Set up timezone
+RUN sudo echo "Europe/Berlin" > /etc/timezone
+RUN sudo dpkg-reconfigure -f noninteractive tzdata
 
 # Set up dotfiles
 COPY ./zsh/* /root/
