@@ -31,8 +31,8 @@ RUN apt-get install -y nodejs
 # Install Ansible
 RUN apt-add-repository ppa:ansible/ansible && apt-get update && apt-get install -y ansible
 
-# Install Travis CLI
-RUN gem install travis --no-rdoc --no-ri
+# Install Travis CLI and Bundler
+RUN gem install travis bundler --no-rdoc --no-ri
 
 # Install Heroku toolbelt
 RUN wget -qO- https://cli-assets.heroku.com/install-ubuntu.sh | sh
