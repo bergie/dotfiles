@@ -8,6 +8,7 @@ ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 # Common packages
 RUN apt-get update && apt-get install -y \
       build-essential \
+      software-properties-common \
       tzdata \
       psmisc \
       curl \
@@ -24,6 +25,9 @@ RUN apt-get update && apt-get install -y \
 # Install Node.js LTS
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN apt-get install -y nodejs
+
+# Install Ansible
+RUN apt-add-repository ppa:ansible/ansible && apt-get update && apt-get install -y ansible
 
 # Install oh-my-zsh
 RUN chsh -s /usr/bin/zsh
