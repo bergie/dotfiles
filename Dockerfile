@@ -29,8 +29,8 @@ RUN chsh -s /usr/bin/zsh
 RUN curl -L http://install.ohmyz.sh | sh || true
 
 # Set up timezone
-RUN sudo echo "Europe/Berlin" > /etc/timezone
-RUN sudo dpkg-reconfigure -f noninteractive tzdata
+RUN echo "Europe/Berlin" > /etc/timezone
+RUN dpkg-reconfigure -f noninteractive tzdata
 
 # Set up dotfiles
 COPY ./zsh/* /root/
