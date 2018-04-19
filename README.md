@@ -18,6 +18,12 @@ $ docker volume rm workstation && docker volume create workstation
 $ docker pull bergie/shell
 ```
 
+### Requirements
+
+* Terminal application (xterm, iTerm2, whatever)
+* Docker
+* [Powerline fonts](https://github.com/powerline/fonts)
+
 ## Installation on host
 
 These dotfiles are easiest to deploy with [GNU Stow](https://www.gnu.org/software/stow/). Install it for the appropriate operating system:
