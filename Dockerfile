@@ -19,6 +19,8 @@ RUN apt-get update && apt-get install -y \
       zsh \
       ledger \
       mosh \
+      ruby \
+      ruby-dev \
       mosquitto \
       mosquitto-clients
 
@@ -28,6 +30,9 @@ RUN apt-get install -y nodejs
 
 # Install Ansible
 RUN apt-add-repository ppa:ansible/ansible && apt-get update && apt-get install -y ansible
+
+# Install Travis CLI
+RUN gem install travis --no-rdoc --no-ri
 
 # Install oh-my-zsh
 RUN chsh -s /usr/bin/zsh
