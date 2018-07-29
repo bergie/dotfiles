@@ -59,7 +59,11 @@ fi
 
 if [ "$TMUX" = "" ]; then tmux attach; fi
 
-[ ! -z "$(ls -A /keys)" ] && eval `ssh-agent -s` && ssh-add /keys/id_rsa
+if [[ -a ~/.ssh/id_rsa ]]; then
+  eval `ssh-agent -s` && ssh-add ~/.ssh/id_rsa
+else
+  eval `ssh-agent -s` && ssh-add /keys/id_rsa
+fi
 
 # added by travis gem
 [ -f /home/bergie/.travis/travis.sh ] && source /home/bergie/.travis/travis.sh
