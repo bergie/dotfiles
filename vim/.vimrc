@@ -111,3 +111,11 @@ map <C-n> :NERDTreeToggle<CR>
 let NERDTreeQuitOnOpen = 1
 " Show dotfiles by default
 let NERDTreeShowHidden=1
+
+" Poor man vim-rooter, git only, using fugitive
+autocmd BufLeave * let b:last_cwd = getcwd()
+autocmd BufEnter * if exists('b:last_cwd')
+                \|   execute 'lcd' b:last_cwd
+                \| else
+                \|   silent! Glcd
+                \| endif
