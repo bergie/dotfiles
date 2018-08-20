@@ -37,6 +37,12 @@ RUN gem install travis bundler --no-rdoc --no-ri
 # Install Heroku toolbelt
 RUN wget -qO- https://cli-assets.heroku.com/install-ubuntu.sh | sh
 
+# Install Google cloud SDK
+RUN export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)" && \
+      echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && \
+      curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - && \
+      apt-get update -y && apt-get install google-cloud-sdk -y
+
 # Install oh-my-zsh
 RUN chsh -s /usr/bin/zsh
 RUN curl -L http://install.ohmyz.sh | sh || true
