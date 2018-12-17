@@ -1,0 +1,18 @@
+{
+    "editor.fontSize": 10,
+    "editor.tabSize": 2,
+    "editor.renderWhitespace": "boundary",
+    "editor.accessibilitySupport": "off",
+    "editor.autoClosingBrackets": "never",
+    "editor.autoClosingQuotes": "never",
+    "editor.minimap.enabled": false,
+    "workbench.statusBar.feedback.visible": false,
+    "breadcrumbs.filePath": "last",
+    "workbench.settings.editor": "json",
+    "vim.insertModeKeyBindings": [
+      {
+        "before": ["j", "j"],
+        "after": ["<Esc>"]
+      }
+    ],
+}
