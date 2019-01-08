@@ -22,7 +22,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
       ruby \
       ruby-dev \
       mosquitto \
-      mosquitto-clients
+      mosquitto-clients \
+      lastpass-cli
 
 # Install Node.js LTS
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
