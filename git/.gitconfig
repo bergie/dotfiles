@@ -3,8 +3,10 @@
 	email = henri.bergius@iki.fi
 	signingkey = henri.bergius@iki.fi
 [diff "odf"]
-  textconv = odt2txt
+	textconv = odt2txt
 [color]
 	diff = true
 [push]
 	default = matching
+[core]
+	editor = vim
