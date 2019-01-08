@@ -3,8 +3,12 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Locales
 RUN apt-get update && apt-get install -y locales
-RUN locale-gen en_US.UTF-8
-ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
+ENV LANG="en_US.UTF-8" LC_ALL="en_US.UTF-8" LANGUAGE="en_US.UTF-8"
+
+RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
+  locale-gen --purge $LANG && \
+    dpkg-reconfigure --frontend=noninteractive locales && \
+    update-locale LANG=$LANG LC_ALL=$LC_ALL LANGUAGE=$LANGUAGE
 
 # Common packages
 RUN apt-get update && apt-get install -y \
