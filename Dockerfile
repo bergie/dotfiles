@@ -30,6 +30,7 @@ RUN apt-get update && apt-get install -y \
       mosquitto-clients \
       postgresql-client \
       jq \
+      rsync \
       lastpass-cli
 
 # Install Node.js LTS
