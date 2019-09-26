@@ -43,6 +43,10 @@
     repo: https://github.com/bergie/dotfiles.git
     dest: "/home/{{ remote_user }}/dotfiles"
     recursive: yes
+- name: Clear zshrc set up by oh-my-zsh
+  file:
+    state: absent
+    path: "/home/{{ remote_user }}/.zshrc"
 - name: Stow configuration
   command: "stow {{ item }}"
   become_user: "{{ remote_user }}"
