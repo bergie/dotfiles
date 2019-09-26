@@ -20,7 +20,10 @@
         - username: pi
     - name: Install Ansible
       role: geerlingguy.ansible
-    - name: Install Travis CLI
-      role: robertdebock.travis
+    # - name: Install Travis CLI
+    #   role: robertdebock.travis
     - name: Configure IDE
       role: bergie-ide
+
+  handlers:
+    - include: ../roles/marinepi-provisioning/handlers/handlers.yml
