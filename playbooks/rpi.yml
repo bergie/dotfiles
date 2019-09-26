@@ -1,0 +1,26 @@
+---
+- name: IDE on a Raspberry Pi
+  hosts: all
+  remote_user: pi
+  gather_facts: yes
+  become: yes
+
+  vars:
+    - hostname: bergie-pi
+    - timezone: Europe/Berlin
+
+  roles:
+    - name: Update Raspbian and setup basics
+      role: marinepi-provisioning/roles/common
+    - name: Install Node.js
+      role: marinepi-provisioning/roles/node
+    - name: Install Oh My Zsh
+      role: gantsign.oh-my-zsh
+      users:
+        - username: pi
+    - name: Install Ansible
+      role: geerlingguy.ansible
+    - name: Install Travis CLI
+      role: robertdebock.travis
+    - name: Configure IDE
+      role: bergie-ide

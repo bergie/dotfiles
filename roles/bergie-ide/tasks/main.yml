@@ -1,0 +1,58 @@
+--- 
+- name: Ensure locale exists
+  locale_gen:
+    name: en_US.UTF-8
+    state: present
+- name: Set default locale
+  command: update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
+- name: Deploy SSH keys
+  become_user: "{{ ansible_user }}"
+  authorized_key:
+    user: "{{ ansible_user }}"
+    state: present
+    key: https://github.com/bergie.keys
+- name: Install IDE packages
+  apt:
+    name: "{{ packages }}"
+    state: latest
+  vars:
+    packages:
+    - build-essential
+    - software-properties-common
+    - tzdata
+    - psmisc
+    - curl
+    - wget
+    - tmux
+    - vim
+    - zsh
+    - ledger
+    - mosh
+    - ruby
+    - ruby-dev
+    - mosquitto
+    - mosquitto-clients
+    - postgresql-client
+    - jq
+    - rsync
+    - lastpass-cli
+- name: Create a directory if it does not exist
+  become_user: "{{ ansible_user }}"
+  file:
+    path: "/home/{{ ansible_user }}/Projects"
+    state: directory
+- name: Clone dotfiles repo
+  become_user: "{{ ansible_user }}"
+  git:
+    repo: https://github.com/bergie/dotfiles.git
+    dest: "/home/{{ ansible_user }}/Projects/dotfiles"
+    recursive: yes
+- name: Stow configuration
+  command: "stow {{ item }}"
+  become_user: "{{ ansible_user }}"
+  args:
+    chdor: "/home/{{ ansible_user }}/Projects/dotfiles"
+  with_items:
+  - git
+  - vim
+  - zsh

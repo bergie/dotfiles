@@ -48,3 +48,11 @@ For vim you'll also want to fetch the plugins:
 ```term
 $ git submodule update --init
 ```
+
+## Installation on a remote host
+
+Uses Ansible to provision the environment.
+
+```bash
+$ make deploy ENV=rpi
+```
