@@ -6,9 +6,9 @@
 - name: Set default locale
   command: update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
 - name: Deploy SSH keys
-  become_user: "{{ ansible_user }}"
+  become_user: "{{ remote_user }}"
   authorized_key:
-    user: "{{ ansible_user }}"
+    user: "{{ remote_user }}"
     state: present
     key: https://github.com/bergie.keys
 - name: Install IDE packages
@@ -37,21 +37,21 @@
     - rsync
     - lastpass-cli
 - name: Create a directory if it does not exist
-  become_user: "{{ ansible_user }}"
+  become_user: "{{ remote_user }}"
   file:
-    path: "/home/{{ ansible_user }}/Projects"
+    path: "/home/{{ remote_user }}/Projects"
     state: directory
 - name: Clone dotfiles repo
-  become_user: "{{ ansible_user }}"
+  become_user: "{{ remote_user }}"
   git:
     repo: https://github.com/bergie/dotfiles.git
-    dest: "/home/{{ ansible_user }}/Projects/dotfiles"
+    dest: "/home/{{ remote_user }}/Projects/dotfiles"
     recursive: yes
 - name: Stow configuration
   command: "stow {{ item }}"
-  become_user: "{{ ansible_user }}"
+  become_user: "{{ remote_user }}"
   args:
-    chdor: "/home/{{ ansible_user }}/Projects/dotfiles"
+    chdor: "/home/{{ remote_user }}/Projects/dotfiles"
   with_items:
   - git
   - vim

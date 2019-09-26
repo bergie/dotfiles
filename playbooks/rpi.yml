@@ -24,6 +24,8 @@
     #   role: robertdebock.travis
     - name: Configure IDE
       role: bergie-ide
+      vars:
+        remote_user: pi
 
   handlers:
     - include: ../roles/marinepi-provisioning/handlers/handlers.yml
