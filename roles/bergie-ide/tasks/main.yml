@@ -36,23 +36,24 @@
     - jq
     - rsync
     - lastpass-cli
-- name: Create a directory if it does not exist
-  become_user: "{{ remote_user }}"
-  file:
-    path: "/home/{{ remote_user }}/Projects"
-    state: directory
+    - stow
 - name: Clone dotfiles repo
   become_user: "{{ remote_user }}"
   git:
     repo: https://github.com/bergie/dotfiles.git
-    dest: "/home/{{ remote_user }}/Projects/dotfiles"
+    dest: "/home/{{ remote_user }}/dotfiles"
     recursive: yes
 - name: Stow configuration
   command: "stow {{ item }}"
   become_user: "{{ remote_user }}"
   args:
-    chdor: "/home/{{ remote_user }}/Projects/dotfiles"
+    chdir: "/home/{{ remote_user }}/dotfiles"
   with_items:
   - git
   - vim
   - zsh
+- name: Ensure that projects directory is present
+  become_user: "{{ remote_user }}"
+  file:
+    path: "/home/{{ remote_user }}/Projects"
+    state: directory
