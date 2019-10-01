@@ -8,8 +8,8 @@ docker push $DOCKER_IMAGE
 
 echo "Publishing to GitHub Package Registry"
 docker login docker.pkg.github.com -u "$GITHUB_USERNAME" -p "$GITHUB_PASSWORD"
-docker tag $DOCKER_IMAGE docker.pkg.github.com/bergie/dotfiles/shell:latest
+docker tag $DOCKER_IMAGE docker.pkg.github.com/$GITHUB_USERNAME/dotfiles/shell:latest
 if [ $TRAVIS_TAG ]; then
-  docker tag $DOCKER_IMAGE docker.pkg.github.com/bergie/dotfiles/shell:$TRAVIS_TAG
+  docker tag $DOCKER_IMAGE docker.pkg.github.com/$GITHUB_USERNAME/dotfiles/shell:$TRAVIS_TAG
 fi
-docker push docker.pkg.github.com/bergie/dotfiles/shell
+docker push docker.pkg.github.com/$GITHUB_USERNAME/dotfiles/shell
