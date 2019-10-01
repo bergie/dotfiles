@@ -1,6 +1,15 @@
 #!/bin/bash
+echo "Publishing to Docker Hub"
 docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
 if [ $TRAVIS_TAG ]; then
   docker tag $DOCKER_IMAGE $DOCKER_IMAGE:$TRAVIS_TAG
 fi
 docker push $DOCKER_IMAGE
+
+echo "Publishing to GitHub Package Registry"
+docker login docker.pkg.github.com -u "$GITHUB_USERNAME" -p "$GITHUB_PASSWORD"
+docker tag $DOCKER_IMAGE docker.pkg.github.com/$GITHUB_USERNAME/dotfiles/shell:latest
+if [ $TRAVIS_TAG ]; then
+  docker tag $DOCKER_IMAGE docker.pkg.github.com/$GITHUB_USERNAME/dotfiles/shell:$TRAVIS_TAG
+fi
+docker push docker.pkg.github.com/$GITHUB_USERNAME/dotfiles/shell

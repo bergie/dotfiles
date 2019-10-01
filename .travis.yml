@@ -3,28 +3,25 @@ node_js: lts/*
 services:
 - docker
 before_script:
-# Prepare cross-compiling environment if targeting ARM
 - if [ "$TARGET" == "raspberrypi3" ]; then docker run --rm --privileged multiarch/qemu-user-static:register --reset; fi
 script:
-# Use different base image for ARM
 - if [ "$TARGET" == "raspberrypi3" ]; then sed -i 's/ubuntu:latest/resin\/rpi-raspbian:stretch/' Dockerfile; fi
-# Build the Docker image
 - docker build -t $DOCKER_IMAGE -f Dockerfile .
 deploy:
-  -
-    provider: script
-    script: bash utils/docker_push
-    on:
-      branch: master
-  -
-    provider: script
-    script: bash utils/docker_push
-    on:
-      tags: true
+- provider: script
+  script: bash utils/docker_push
+  on:
+    branch: master
+- provider: script
+  script: bash utils/docker_push
+  on:
+    tags: true
 env:
   global:
   - secure: ecstHKFzuadZNwtCypRyRBF3So4QzX+/fcd/IVb7HeBoCEuu9+5tePBaakPmUKryaCOh/s1/VGsXnHH2uM0xIOljmr/DUQV1SmwWSyoV1BCxlfZV3IDqNCO293EfG4hFZuIhT1WsbPAazf94zI/vQN9sht3Eln06/PMI065g39E=
   - secure: Hp9qrgGbWZjB3yGQpfTppdkwgt7UN/UQA3LYrL7VttY/tgvH5IGImmY3VUnwjVN8iSjJ0wgVbRAGQZfcV2sPYl9Skk3deJ7nrWeKlRVfCxyg2RgMoYFKC4qiuhE9XwBq3xwblxoSpRpnbEZMuuUVzirqSBngWOWr2yyJmcd3pkY=
+  - secure: Z61zuexwbv4r+whop9AIeSon0mCQWcvyR2lu2nSykldWIxqmaYo/9ZlIpNpoqVNA23LNsKj24+O/ffl/zlvWJdlGIlIuBk6QOTbdq1pW5hrEQfhsDGRnyL2r4Z4lFqLKO8lUaUsWLNjXydQsq8R/E8n2dq1aOuIi3xTx3TjExLw=
+  - secure: NLPMclR9RiBAvq/9p2VKlUdX3xEBPdw/sgunTQnB+ijxv3Zt1GRpD7cIq5mqgrY8cnsyQbLrDyZ8hBB4Wv/D26Y1DGi/8xDc9Ud/Nlz8xoZzTxUvXHD96FIiOK3FThKKgePC28dJExC3tLbzk5WkPpR6jNrCDxZ2rUgLvsqB7bM=
 notifications:
   email:
     on_success: never
