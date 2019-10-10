@@ -2,7 +2,7 @@ tmp
 backup
 vim/.vim/.netrwhist
 .DS_Store
-roles/gantsign.oh-my-zsh/
-roles/geerlingguy.ansible/
-roles/marinepi-provisioning/
-roles/robertdebock.travis/
+ansible/roles/gantsign.oh-my-zsh/
+ansible/roles/geerlingguy.ansible/
+ansible/roles/marinepi-provisioning/
+ansible/roles/robertdebock.travis/

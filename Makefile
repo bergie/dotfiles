@@ -1,10 +1,10 @@
 ENV?=rpi
-ANSIBLE_ROLES_PATH=$(shell pwd)/roles
+ANSIBLE_ROLES_PATH=$(shell pwd)/ansible/roles
 
-roles/marinepi-provisioning:
-	ansible-galaxy install -r requirements.yml -p roles
+ansible/roles/marinepi-provisioning:
+	ansible-galaxy install -r ansible/requirements.yml -p ansible/roles
 
-deploy: roles/marinepi-provisioning
-	ANSIBLE_ROLES_PATH=$(ANSIBLE_ROLES_PATH) ansible-playbook -i hosts -l $(ENV) playbooks/rpi.yml
+deploy: ansible/roles/marinepi-provisioning
+	ANSIBLE_ROLES_PATH=$(ANSIBLE_ROLES_PATH) ansible-playbook -i ansible/hosts -l $(ENV) ansible/playbooks/rpi.yml
 
 .PHONY: deploy
