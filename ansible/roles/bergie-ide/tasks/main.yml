@@ -30,6 +30,7 @@
     - mosh
     - ruby
     - ruby-dev
+    - python3-pip
     - mosquitto
     - mosquitto-clients
     - postgresql-client
