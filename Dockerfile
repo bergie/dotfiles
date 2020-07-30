@@ -31,14 +31,12 @@ RUN apt-get update && apt-get install -y \
       postgresql-client \
       jq \
       rsync \
+      ansible \
       lastpass-cli
 
 # Install Node.js LTS
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 RUN apt-get install -y nodejs
-
-# Install Ansible
-RUN apt-add-repository ppa:ansible/ansible && apt-get update && apt-get install -y ansible
 
 # Install Travis CLI and Bundler
 RUN gem install travis bundler --no-rdoc --no-ri
