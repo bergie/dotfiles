@@ -31,3 +31,6 @@
 [submodule "vim/.vim/pack/bergie/start/vim-fugitive"]
 	path = vim/.vim/pack/bergie/start/vim-fugitive
 	url = https://github.com/tpope/vim-fugitive.git
+[submodule "vim/.vim/pack/bergie/start/typescript-vim"]
+	path = vim/.vim/pack/bergie/start/typescript-vim
+	url = https://github.com/leafgarland/typescript-vim.git
