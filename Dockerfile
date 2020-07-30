@@ -39,7 +39,7 @@ RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 RUN apt-get install -y nodejs
 
 # Install Travis CLI and Bundler
-RUN gem install travis bundler --no-rdoc --no-ri
+RUN gem install travis bundler --no-document
 
 # Install Heroku toolbelt
 RUN wget -qO- https://cli-assets.heroku.com/install-ubuntu.sh | sh
