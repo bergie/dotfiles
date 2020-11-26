@@ -34,3 +34,6 @@
 [submodule "vim/.vim/pack/bergie/start/typescript-vim"]
 	path = vim/.vim/pack/bergie/start/typescript-vim
 	url = https://github.com/leafgarland/typescript-vim.git
+[submodule "vim/.vim/pack/bergie/start/editorconfig-vim"]
+	path = vim/.vim/pack/bergie/start/editorconfig-vim
+	url = https://github.com/editorconfig/editorconfig-vim.git
