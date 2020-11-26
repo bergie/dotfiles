@@ -10,3 +10,5 @@
 	default = matching
 [core]
 	editor = vim
+[pull]
+	ff = only
