@@ -26,7 +26,6 @@ jobs:
         name: Login to DockerHub
         uses: docker/login-action@v1
         with:
-          registry: docker.pkg.github.com
           username: ${{ github.repository_owner }}
           password: ${{ secrets.DOCKER_TOKEN }}
       -
