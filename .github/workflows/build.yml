@@ -21,5 +21,9 @@ jobs:
           install: true
       -
         name: Build
-        run: |
-          docker build -t bergie/shell . # will run buildx
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          tags: |
