@@ -27,3 +27,4 @@ jobs:
           file: ./Dockerfile
           push: false
           tags: |
+            bergie/shell:latest
