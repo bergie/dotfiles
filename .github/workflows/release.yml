@@ -44,5 +44,5 @@ jobs:
           push: true
           tags: |
             bergie/shell:latest
-            docker.pkg.github.com/bergie/shell:latest
+            docker.pkg.github.com/bergie/dotfiles/shell:latest
 
