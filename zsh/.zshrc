@@ -49,9 +49,6 @@ export PATH="/usr/local/heroku/bin:$PATH"
 LC_CTYPE="en_US.UTF-8"
 LANG="en_US.UTF-8"
 
-# added by travis gem
-[ -f $HOME/.travis/travis.sh ] && source $HOME/.travis/travis.sh
-
 if [[ -s $HOME/google-cloud-sdk ]]; then
   # The next line updates PATH for the Google Cloud SDK.
   source $HOME/google-cloud-sdk/path.zsh.inc
@@ -64,9 +61,6 @@ if [[ -a ~/.ssh/id_rsa ]]; then
 else
   eval `ssh-agent -s` && ssh-add /keys/id_rsa
 fi
-
-# added by travis gem
-[ -f /home/bergie/.travis/travis.sh ] && source /home/bergie/.travis/travis.sh
 
 export GOPATH=$HOME/.go
 PATH=$PATH:$GOPATH/bin
