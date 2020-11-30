@@ -35,7 +35,7 @@ RUN apt-get update && apt-get install -y \
       lastpass-cli
 
 # Install Node.js LTS
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 RUN apt-get install -y nodejs
 
 # Install Bundler
