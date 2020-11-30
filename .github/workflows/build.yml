@@ -1,0 +1,40 @@
+name: Docker
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      -
+        name: Set up QEMU for multiarch building
+        uses: docker/setup-qemu-action@v1
+      -
+        uses: docker/setup-buildx-action@v1
+        id: buildx
+        with:
+          install: true
+      -
+        name: Build
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          tags: |
+            bergie/shell:latest
+  merge-me:
+    name: Auto-merge dependency updates
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      -
+        uses: ridedott/merge-me-action@v1.8.53
+        with:
+          GITHUB_LOGIN: 'dependabot[bot]'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -35,11 +35,11 @@ RUN apt-get update && apt-get install -y \
       lastpass-cli
 
 # Install Node.js LTS
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 RUN apt-get install -y nodejs
 
-# Install Travis CLI and Bundler
-RUN gem install travis bundler --no-document
+# Install Bundler
+RUN gem install bundler --no-document
 
 # Install Heroku toolbelt
 RUN wget -qO- https://cli-assets.heroku.com/install-ubuntu.sh | sh
