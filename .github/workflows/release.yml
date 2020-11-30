@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  test:
+  publish:
     runs-on: ubuntu-latest
     steps:
       -
@@ -36,7 +36,7 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
       -
-        name: Build
+        name: Build and push
         uses: docker/build-push-action@v2
         with:
           context: .
