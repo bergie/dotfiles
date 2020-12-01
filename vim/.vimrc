@@ -120,3 +120,6 @@ autocmd BufEnter * if exists('b:last_cwd')
                 \| else
                 \|   silent! Glcd
                 \| endif
+
+" Add fenced languages support
+let g:markdown_fenced_languages = ['javascript', 'typescript', 'python', 'json']
