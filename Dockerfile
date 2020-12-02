@@ -41,9 +41,6 @@ RUN apt-get install -y nodejs
 # Install Bundler
 RUN gem install bundler --no-document
 
-# Install Heroku toolbelt
-RUN wget -qO- https://cli-assets.heroku.com/install-ubuntu.sh | sh
-
 # Install oh-my-zsh
 RUN chsh -s /usr/bin/zsh
 RUN curl -L http://install.ohmyz.sh | sh || true
