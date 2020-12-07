@@ -47,7 +47,7 @@ set guioptions-=T           " Remove toolbar in GUI
 set showmode
 
 " Style vertical splits
-set fillchars+=vert:\ 
+set fillchars+=vert:\
 
 " Visualize tabs and linebreaks
 set list
@@ -60,6 +60,10 @@ let g:ale_sign_warning = '•'
 let g:ale_sign_column_always = 1
 highlight link ALEErrorSign    Error
 highlight link ALEWarningSign  Warning
+
+" Easier code navigation
+nmap gd :ALEGoToDefinition<CR>
+nmap gr :ALEFindReferences<CR>
 
 " Improve NerdTree looks
 let NERDTreeMinimalUI = 1
