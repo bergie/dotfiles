@@ -62,10 +62,11 @@ highlight link ALEErrorSign    Error
 highlight link ALEWarningSign  Warning
 
 " Easier code navigation
-nmap gd :ALEGoToDefinition -vsplit<CR>
+let g:ale_default_navigation = 'split'
+nmap gd :ALEGoToDefinition<CR>
 nmap gr :ALEFindReferences<CR>
 " Enable autocomplete (ctrl-n/ctrl-p to navigate)
-let g:ale_completion_enabled=1
+let g:ale_completion_enabled = 1
 
 " Improve NerdTree looks
 let NERDTreeMinimalUI = 1
