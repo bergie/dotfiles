@@ -47,7 +47,7 @@ set guioptions-=T           " Remove toolbar in GUI
 set showmode
 
 " Style vertical splits
-set fillchars+=vert:\
+:set fillchars+=vert:\ " No character in vertical splits, just color
 
 " Visualize tabs and linebreaks
 set list
