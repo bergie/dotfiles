@@ -42,7 +42,7 @@
 "                         parameters
 "  - Clayton Parker (claytron) - Convinced by Kurt Maier to use Zenburn. Point
 "    out issues with LineNr, fix directory styles, and their usage in MacVim.
-"  - PaweÅ Piekarski - Spotted bad FoldColumn and TabLine. Made better 
+"  - Paweł Piekarski - Spotted bad FoldColumn and TabLine. Made better 
 "                      FoldColumn colors, fixed TabLine colors.
 "  - Jim - Fix for missing Include group for terminal
 "  - Peter (Sakartu) - ColorColumn fixes
@@ -75,12 +75,12 @@
 "
 "      let g:zenburn_color_also_Ignore = 1
 "
-" * To get more contrast to the Visual selection, use
+" * To increase the contrast/brightness of the Visual selection, use
 "
 "      let g:zenburn_alternate_Visual = 1
 "
-"   Note: this is enabled only if the old-style Visual
-"   if used, see g:zenburn_old_Visual
+"   Note: if the old-style Visual is used, this increases the contrast.
+"   Otherwise it chooses a brighter background; see g:zenburn_old_Visual
 "
 " * To use alternate colouring for Error message, use
 "
@@ -111,6 +111,12 @@
 "   ":set cursorline cursorcolumn", since otherwise the effect won't be
 "   seen.
 "
+" * With g:zenburn_high_Contrast enabled, the CursorLine and CursorColumn will
+"   be bold.  If you don't like it, bold CursorLine and CursorColumn can be
+"   disabled with:
+"
+"      let g:zenburn_disable_bold_CursorBars=1
+"
 " * New (dark) Visual coloring has been introduced.
 "   The dark Visual is more aligned with the rest of the colour scheme,
 "   especially if you use line numbers. If you wish to use the 
@@ -119,6 +125,22 @@
 "      let g:zenburn_old_Visual = 1
 "
 "   Default is to use the new Visual.
+"
+"  * Italic comments can be enabled with
+"
+"      let g:zenburn_italic_Comment=1
+"
+"   Note: This requires the terminal to support italics. Try this in your
+"   terminal:
+"
+"      echo -e "\e[3m test \e[23m"
+"
+"   and if the output is not italic, then you should not enable italic comments,
+"   as they will not render correctly.
+"
+"  * If you prefer line numbers to be less visible, use
+"
+"      let g:zenburn_subdued_LineNr=1
 "
 "  * EXPERIMENTAL FEATURE: Zenburn would like to support TagHighlight
 "    (an evolved ctags-highlighter) by Al Budden (homepage:
@@ -189,12 +211,24 @@ if ! exists("g:zenburn_unified_CursorColumn")
     let g:zenburn_unified_CursorColumn = 0
 endif
 
+if ! exists("g:zenburn_disable_bold_CursorBars")
+    let g:zenburn_disable_bold_CursorBars = 0
+endif
+
 if ! exists("g:zenburn_old_Visual")
     let g:zenburn_old_Visual = 0
 endif
 
 if ! exists("g:zenburn_enable_TagHighlight")
     let g:zenburn_enable_TagHighlight = 0
+endif
+
+if ! exists("g:zenburn_italic_Comment")
+    let g:zenburn_italic_Comment = 0
+endif
+
+if ! exists("g:zenburn_subdued_LineNr")
+    let g:zenburn_subdued_LineNr = 0
 endif
 
 " -----------------------------------------------
@@ -209,7 +243,12 @@ let g:colors_name="zenburn"
 
 hi Boolean         guifg=#dca3a3                              ctermfg=181
 hi Character       guifg=#dca3a3 gui=bold                     ctermfg=181 cterm=bold
-hi Comment         guifg=#7f9f7f gui=italic                   ctermfg=108
+if exists("g:zenburn_italic_Comment") && g:zenburn_italic_Comment
+    hi Comment         guifg=#7f9f7f gui=italic                   ctermfg=108 cterm=italic
+else
+    hi Comment         guifg=#7f9f7f                              ctermfg=108
+endif
+hi Comment         guifg=#7f9f7f                              ctermfg=108
 hi Conditional     guifg=#f0dfaf gui=bold                     ctermfg=223 cterm=bold
 hi Constant        guifg=#dca3a3 gui=bold                     ctermfg=181 cterm=bold
 hi Cursor          guifg=#000d18 guibg=#8faf9f gui=bold       ctermfg=233 ctermbg=109 cterm=bold
@@ -273,17 +312,36 @@ hi SpellLocal guisp=#7cac7c guifg=#9ccc9c  ctermfg=151 ctermbg=237
 if exists("g:zenburn_high_Contrast") && g:zenburn_high_Contrast
     " use new darker background
     hi Normal        guifg=#dcdccc guibg=#1f1f1f           ctermfg=188 ctermbg=234
+    hi Conceal       guifg=#8f8f8f guibg=#333333           ctermfg=246 ctermbg=235
     hi ColorColumn   guibg=#33332f                         ctermbg=235
-    hi CursorLine    guibg=#121212 gui=bold                ctermbg=233 cterm=none
-    hi CursorLineNr  guifg=#f2f3bb guibg=#161616           ctermfg=229 ctermbg=233
-    if exists("g:zenburn_unified_CursorColumn") && g:zenburn_unified_CursorColumn
-        hi CursorColumn  guibg=#121212 gui=bold            ctermbg=233 cterm=none
+    if exists("g:zenburn_disable_bold_CursorBars") && g:zenburn_disable_bold_CursorBars
+        " no bold
+        if exists("g:zenburn_unified_CursorColumn") && g:zenburn_unified_CursorColumn
+            hi CursorColumn  guibg=#121212                     ctermbg=233 cterm=none
+        else
+            hi CursorColumn  guibg=#2b2b2b                     ctermbg=235 cterm=none
+        endif
+
+        hi CursorLine    guibg=#121212                         ctermbg=233 cterm=none
     else
-        hi CursorColumn  guibg=#2b2b2b                     ctermbg=235 cterm=none
+        " bold!
+        if exists("g:zenburn_unified_CursorColumn") && g:zenburn_unified_CursorColumn
+            hi CursorColumn  guibg=#121212 gui=bold            ctermbg=233 cterm=bold
+        else
+            hi CursorColumn  guibg=#2b2b2b gui=bold            ctermbg=235 cterm=bold
+        endif
+
+        hi CursorLine    guibg=#121212 gui=bold                ctermbg=233 cterm=bold
     endif
+    hi CursorLineNr  guifg=#f2f3bb guibg=#161616           ctermfg=229 ctermbg=233 cterm=none
     hi FoldColumn    guibg=#161616                         ctermbg=233 ctermfg=109
     hi Folded        guibg=#161616                         ctermbg=233 ctermfg=109
-    hi LineNr        guifg=#9fafaf guibg=#161616           ctermfg=248 ctermbg=233
+
+    if exists("g:zenburn_subdued_LineNr") && g:zenburn_subdued_LineNr
+        hi LineNr        guifg=#424242 guibg=#1b1b1b           ctermfg=238 ctermbg=234
+    else
+        hi LineNr        guifg=#9fafaf guibg=#161616           ctermfg=248 ctermbg=233
+    endif
     hi NonText       guifg=#404040 gui=bold                ctermfg=238
     hi Pmenu         guibg=#242424 guifg=#ccccbc           ctermfg=251 ctermbg=235
     hi PmenuSel      guibg=#353a37 guifg=#ccdc90 gui=bold  ctermfg=187 ctermbg=236 cterm=bold
@@ -296,9 +354,10 @@ if exists("g:zenburn_high_Contrast") && g:zenburn_high_Contrast
 else
     " Original, lighter background
     hi Normal        guifg=#dcdccc guibg=#3f3f3f           ctermfg=188 ctermbg=237
+    hi Conceal       guifg=#8f8f8f guibg=#484848           ctermfg=246 ctermbg=238
     hi ColorColumn   guibg=#484848                         ctermbg=238
     hi CursorLine    guibg=#434443                         ctermbg=238 cterm=none
-    hi CursorLineNr  guifg=#d2d39b guibg=#262626           ctermfg=230 ctermbg=235
+    hi CursorLineNr  guifg=#d2d39b guibg=#262626           ctermfg=230 ctermbg=235 cterm=none
     if exists("g:zenburn_unified_CursorColumn") && g:zenburn_unified_CursorColumn
         hi CursorColumn  guibg=#434343                     ctermbg=238 cterm=none
     else
@@ -306,7 +365,11 @@ else
     endif
     hi FoldColumn    guibg=#333333                         ctermbg=236 ctermfg=109
     hi Folded        guibg=#333333                         ctermbg=236 ctermfg=109
-    hi LineNr        guifg=#9fafaf guibg=#262626           ctermfg=248 ctermbg=235
+    if exists("g:zenburn_subdued_LineNr") && g:zenburn_subdued_LineNr
+        hi LineNr        guifg=#5d6262 guibg=#353535           ctermfg=240 ctermbg=236
+    else
+        hi LineNr        guifg=#9fafaf guibg=#262626           ctermfg=248 ctermbg=235
+    endif
     hi NonText       guifg=#5b605e gui=bold                ctermfg=240
     hi Pmenu         guibg=#2c2e2e guifg=#9f9f9f           ctermfg=248 ctermbg=235
     hi PmenuSel      guibg=#242424 guifg=#d0d0a0 gui=bold  ctermfg=187 ctermbg=235 cterm=bold
@@ -353,10 +416,12 @@ if exists("g:zenburn_old_Visual") && g:zenburn_old_Visual
     endif
 else
     " new Visual style
-    if exists("g:zenburn_high_Contrast") && g:zenburn_high_Contrast
+    if exists("g:zenburn_alternate_Visual") && g:zenburn_alternate_Visual
+        " brighter than the high/low contrast options below
+        hi Visual        guibg=#304a3d  ctermbg=23
+        hi VisualNos     guibg=#304a3d  ctermbg=23
+    elseif exists("g:zenburn_high_Contrast") && g:zenburn_high_Contrast
         " high contrast
-        "hi Visual        guibg=#304a3d
-        "hi VisualNos     guibg=#304a3d
         "TODO no nice greenish in console, 65 is closest. use full black instead,
         "although i like the green..!
         hi Visual        guibg=#0f0f0f  ctermbg=232
@@ -461,6 +526,24 @@ if exists("g:zenburn_enable_TagHighlight") && g:zenburn_enable_TagHighlight
         hi link LocalVariable     WarningMsg
         hi link Structure         WarningMsg
         hi link Union             WarningMsg
+endif
+
+" Terminal support for Vim 8+
+if version >= 802
+    let g:terminal_ansi_colors = [
+        \ '#1f1f1f', '#cc9393',
+        \ '#5f7f5f', '#ffd7a7',
+        \ '#8cb0d3', '#8f8f8f',
+        \ '#71d3b4', '#dfe4cf',
+        \ '#6f6f6f', '#ecb3b3',
+        \ '#ffd7a7', '#8cb0d3',
+        \ '#8f8f8f', '#71d3b4',
+        \ '#dfe4cf', '#ffcfaf',
+        \]
+else
+    if version >= 800
+        hi Terminal ctermbg=232 guibg=#0f0f0f ctermfg=248 guifg=#a8a8a8
+    endif
 endif
 
 " TODO check for more obscure syntax groups that they're ok
