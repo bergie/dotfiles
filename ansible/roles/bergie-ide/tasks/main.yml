@@ -1,0 +1,64 @@
+--- 
+- name: Ensure locale exists
+  locale_gen:
+    name: en_US.UTF-8
+    state: present
+- name: Set default locale
+  command: update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
+- name: Deploy SSH keys
+  become_user: "{{ remote_user }}"
+  authorized_key:
+    user: "{{ remote_user }}"
+    state: present
+    key: https://github.com/bergie.keys
+- name: Install IDE packages
+  apt:
+    name: "{{ packages }}"
+    state: latest
+  vars:
+    packages:
+    - build-essential
+    - software-properties-common
+    - tzdata
+    - psmisc
+    - curl
+    - wget
+    - tmux
+    - vim
+    - zsh
+    - ledger
+    - mosh
+    - ruby
+    - ruby-dev
+    - python3-pip
+    - mosquitto
+    - mosquitto-clients
+    - postgresql-client
+    - jq
+    - rsync
+    - lastpass-cli
+    - stow
+- name: Clone dotfiles repo
+  become_user: "{{ remote_user }}"
+  git:
+    repo: https://github.com/bergie/dotfiles.git
+    dest: "/home/{{ remote_user }}/dotfiles"
+    recursive: yes
+- name: Clear zshrc set up by oh-my-zsh
+  file:
+    state: absent
+    path: "/home/{{ remote_user }}/.zshrc"
+- name: Stow configuration
+  command: "stow {{ item }}"
+  become_user: "{{ remote_user }}"
+  args:
+    chdir: "/home/{{ remote_user }}/dotfiles"
+  with_items:
+  - git
+  - vim
+  - zsh
+- name: Ensure that projects directory is present
+  become_user: "{{ remote_user }}"
+  file:
+    path: "/home/{{ remote_user }}/Projects"
+    state: directory

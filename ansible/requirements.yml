@@ -1,0 +1,4 @@
+- src: https://github.com/tkurki/marinepi-provisioning
+- src: gantsign.oh-my-zsh
+- src: geerlingguy.ansible
+- src: robertdebock.travis
