@@ -3,6 +3,12 @@ My Unix dotfiles
 
 Mostly used for Node.js and IoT development.
 
+### Requirements
+
+* Terminal application (xterm, iTerm2, whatever)
+* Docker
+* [Powerline fonts](https://github.com/powerline/fonts)
+
 ## Running via Docker
 
 There is a Docker image available for this setup. Run it with:
@@ -17,12 +23,6 @@ $ docker run -v ~/Projects:/projects -v workstation:/root -v ~/.ssh:/keys --name
 $ docker volume rm workstation && docker volume create workstation
 $ docker pull bergie/shell
 ```
-
-### Requirements
-
-* Terminal application (xterm, iTerm2, whatever)
-* Docker
-* [Powerline fonts](https://github.com/powerline/fonts)
 
 ## Installation on host
 
@@ -47,4 +47,12 @@ For vim you'll also want to fetch the plugins:
 
 ```term
 $ git submodule update --init
+```
+
+## Installation on a remote host
+
+Uses Ansible to provision the environment.
+
+```bash
+$ make deploy ENV=rpi
 ```
