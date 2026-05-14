@@ -35,6 +35,8 @@ $ brew install stow         # MacOS
 $ apt install stow          # Termux
 ```
 
+Note that the repo needs to be directly under the home directory for stow to do the right thing.
+
 Then apply the configuration bundles you want:
 
 ```term
