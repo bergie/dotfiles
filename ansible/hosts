@@ -1,0 +1,8 @@
+[rpi]
+bergie-pi                 ansible_ssh_host=bergie-pi.local
+
+[new]
+raspberripi               ansible_ssh_host=raspberrypi.local
+
+[local]
+127.0.0.1                 ansible_connection=local
