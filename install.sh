@@ -1,5 +1,5 @@
 #!/bin/sh
 git submodule update --init
-stow zsh
+stow fish
 stow git
-stow vim
+stow nvim

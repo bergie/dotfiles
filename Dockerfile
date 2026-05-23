@@ -20,8 +20,8 @@ RUN apt-get update && apt-get install -y \
       git \
       wget \
       tmux \
-      vim \
-      zsh \
+      neovim \
+      fish \
       ledger \
       mosh \
       ruby \
@@ -31,11 +31,10 @@ RUN apt-get update && apt-get install -y \
       postgresql-client \
       jq \
       rsync \
-      ansible \
-      lastpass-cli
+      ansible
 
 # Install Node.js LTS
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_x4.x | bash -
 RUN apt-get install -y nodejs
 
 # Install Bundler

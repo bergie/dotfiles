@@ -5,3 +5,22 @@ end
 if test -d /opt/homebrew
   fish_add_path /opt/homebrew/bin
 end
+
+set -Ux EDITOR nvim
+set -Ux VISUAL nvim
+
+function vi -d 'Run neovim instead of vim if nvim is installed'
+  if command -q nvim
+    command nvim $argv
+  else
+    command vim $argv
+  end
+end
+
+function vim -d 'Run neovim instead of vim if nvim is installed'
+  if command -q nvim
+    command nvim $argv
+  else
+    command vim $argv
+  end
+end
