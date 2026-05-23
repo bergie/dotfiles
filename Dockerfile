@@ -34,7 +34,7 @@ RUN apt-get update && apt-get install -y \
       ansible
 
 # Install Node.js LTS
-RUN curl -sL https://deb.nodesource.com/setup_x4.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_24.x | bash -
 RUN apt-get install -y nodejs
 
 # Install Bundler
