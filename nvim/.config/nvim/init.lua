@@ -1,5 +1,6 @@
 vim.opt.relativenumber = true
 vim.opt.termguicolors = true
+vim.opt.showmode = true
 
 local opts = { noremap = true, silent = true }
 
