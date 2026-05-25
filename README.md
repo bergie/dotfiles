@@ -40,12 +40,12 @@ Note that the repo needs to be directly under the home directory for stow to do 
 Then apply the configuration bundles you want:
 
 ```term
-$ stow zsh                  # zsh and tmux configuration
+$ stow fish                 # fish and tmux configuration
 $ stow git                  # git configuration
-$ stow vim                  # vim configuration
+$ stow nvim                 # neovim configuration
 ```
 
-For vim you'll also want to fetch the plugins:
+For neovim you'll also want to fetch the plugins:
 
 ```term
 $ git submodule update --init
