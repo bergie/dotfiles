@@ -41,11 +41,10 @@ RUN apt-get install -y nodejs
 RUN gem install bundler --no-document
 
 # Install oh-my-zsh
-RUN chsh -s /usr/bin/zsh
-RUN curl -L http://install.ohmyz.sh | sh || true
+RUN chsh -s /usr/bin/fish
 
 # Set up timezone
-ENV TZ 'Europe/Berlin'
+ENV TZ 'Etc/UTC'
 RUN echo $TZ > /etc/timezone && \
     rm /etc/localtime && \
     ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
