@@ -52,8 +52,8 @@ RUN echo $TZ > /etc/timezone && \
     dpkg-reconfigure -f noninteractive tzdata
 
 # Set up dotfiles
-COPY ./zsh/* /root/
-COPY ./vim/ /root/
+COPY ./fish/* /root/
+COPY ./nvim/ /root/
 COPY ./git/* /root/
 
 # Set up volumes
