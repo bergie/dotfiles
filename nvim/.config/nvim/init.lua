@@ -6,4 +6,15 @@ local opts = { noremap = true, silent = true }
 
 vim.keymap.set("i", "jj", "<ESC>", opts)
 
+-- In Normal mode, arrow keys switch windows
+vim.keymap.set("n", "<up>", "<C-w><up>", opts)
+vim.keymap.set("n", "<down>", "<C-w><down>", opts)
+vim.keymap.set("n", "<left>", "<C-w><left>", opts)
+vim.keymap.set("n", "<right>", "<C-w><right>", opts)
+-- In Insert mode, disable arrow keys
+vim.keymap.set("i", "<up>", "<nop>", opts)
+vim.keymap.set("i", "<down>", "<nop>", opts)
+vim.keymap.set("i", "<left>", "<nop>", opts)
+vim.keymap.set("i", "<right>", "<nop>", opts)
+
 vim.cmd([[colorscheme tokyonight]])
