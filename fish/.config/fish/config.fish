@@ -2,6 +2,8 @@ if status is-interactive
 # Commands to run in interactive sessions can go here
 end
 
+set fish_greeting
+
 if test -d /opt/homebrew
   fish_add_path /opt/homebrew/bin
 end
