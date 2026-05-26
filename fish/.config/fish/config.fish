@@ -24,3 +24,7 @@ function vim -d 'Run neovim instead of vim if nvim is installed'
     command vim $argv
   end
 end
+
+if type -q starship
+  starship init fish | source
+end

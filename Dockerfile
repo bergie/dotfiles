@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y \
       wget \
       tmux \
       neovim \
+      starship \
       fish \
       ledger \
       mosh \
