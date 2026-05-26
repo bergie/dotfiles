@@ -1,6 +1,7 @@
 vim.opt.relativenumber = true
 vim.opt.termguicolors = true
 vim.opt.showmode = true
+vim.opt.undofile = true
 
 local opts = { noremap = true, silent = true }
 
