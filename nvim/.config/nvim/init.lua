@@ -7,6 +7,8 @@ vim.opt.expandtab = true
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 0
 
+vim.opt.scrolloff = 3
+
 local opts = { noremap = true, silent = true }
 
 vim.keymap.set("i", "jj", "<ESC>", opts)
