@@ -1,7 +1,10 @@
 vim.opt.relativenumber = true
 vim.opt.termguicolors = true
 vim.opt.showmode = true
+
 vim.opt.undofile = true
+vim.opt.backup = false
+vim.opt.writebackup = false
 
 vim.opt.expandtab = true
 vim.opt.tabstop = 4
