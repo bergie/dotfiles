@@ -37,6 +37,6 @@
 [submodule "vim/.vim/pack/bergie/start/editorconfig-vim"]
 	path = vim/.vim/pack/bergie/start/editorconfig-vim
 	url = https://github.com/editorconfig/editorconfig-vim.git
-[submodule "nvim/.local/share/nvim/site/pack/plugins/start/zenburn"]
-	path = nvim/.local/share/nvim/site/pack/plugins/start/zenburn.nvim
-	url = https://github.com/phha/zenburn.nvim
+[submodule "nvim/.local/share/nvim/site/pack/plugins/start/tokyonight"]
+	path = nvim/.local/share/nvim/site/pack/plugins/start/tokyonight
+	url = https://github.com/folke/tokyonight.nvim.git
