@@ -20,9 +20,8 @@ $ docker pull bergie/shell
 
 ### Requirements
 
-* Terminal application (xterm, iTerm2, whatever)
+* Terminal application (xterm, ghostty, whatever)
 * Docker
-* [Powerline fonts](https://github.com/powerline/fonts)
 
 ## Installation on host
 
@@ -32,7 +31,7 @@ These dotfiles are easiest to deploy with [GNU Stow](https://www.gnu.org/softwar
 $ sudo apt-get install stow # Debian derivatives
 $ sudo pacman -S stow       # Arch
 $ brew install stow         # MacOS
-$ apt install stow          # Termux
+$ pkg install stow          # Termux
 ```
 
 Note that the repo needs to be directly under the home directory for stow to do the right thing.
