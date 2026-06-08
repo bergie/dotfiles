@@ -8,7 +8,10 @@ end
 set fish_greeting
 
 if test -d /opt/homebrew
-  fish_add_path /opt/homebrew/bin
+  fish_add_path -p /opt/homebrew/bin
+end
+if test -d /opt/homebrew/Cellar/ruby/4.0.5/bin
+  fish_add_path -p /opt/homebrew/Cellar/ruby/4.0.5/bin
 end
 
 set -Ux EDITOR nvim

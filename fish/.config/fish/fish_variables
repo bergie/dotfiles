@@ -3,4 +3,4 @@
 SETUVAR --export EDITOR:nvim
 SETUVAR --export VISUAL:nvim
 SETUVAR __fish_initialized:4300
-SETUVAR fish_user_paths:/opt/homebrew/bin
+SETUVAR fish_user_paths:/opt/homebrew/Cellar/ruby/4\x2e0\x2e5/bin\x1e/opt/homebrew/bin
