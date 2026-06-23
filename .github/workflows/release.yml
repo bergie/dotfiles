@@ -24,20 +24,20 @@ jobs:
           install: true
       -
         name: Login to DockerHub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v4
         with:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.DOCKER_TOKEN }}
       -
         name: Login to GitHub Packages Docker Registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.GHCR_PAT }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       -
         name: Build and push
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: ./Dockerfile
@@ -46,4 +46,3 @@ jobs:
           tags: |
             bergie/shell:latest
             ghcr.io/bergie/shell:latest
-
