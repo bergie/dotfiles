@@ -2,6 +2,8 @@ tmp
 backup
 vim/.vim/.netrwhist
 ssh/.ssh/id_rsa
+ssh/.ssh/id_rsa.pub
 ssh/.ssh/id_dsa
+ssh/.ssh/id_dsa.pub
 ssh/.ssh/known_hosts
 .DS_Store
