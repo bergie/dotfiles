@@ -6,4 +6,5 @@ ssh/.ssh/id_rsa.pub
 ssh/.ssh/id_dsa
 ssh/.ssh/id_dsa.pub
 ssh/.ssh/known_hosts
+fish/.config/fish/fish_variables
 .DS_Store
