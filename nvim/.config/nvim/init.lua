@@ -12,6 +12,9 @@ vim.opt.shiftwidth = 0
 
 vim.opt.scrolloff = 3
 
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+
 local opts = { noremap = true, silent = true }
 
 vim.keymap.set("i", "jj", "<ESC>", opts)
