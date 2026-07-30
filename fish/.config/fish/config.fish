@@ -17,6 +17,9 @@ end
 if test -d $HOME/.local/bin
   fish_add_path $HOME/.local/bin
 end
+if test -d $HOME/.deno/bin
+  fish_add_path $HOME/.deno/bin
+end
 
 set -Ux EDITOR nvim
 set -Ux VISUAL nvim
