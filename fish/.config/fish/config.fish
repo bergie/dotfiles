@@ -20,6 +20,9 @@ end
 if test -d $HOME/.deno/bin
   fish_add_path $HOME/.deno/bin
 end
+if test -d $HOME/.bun/bin
+  fish_add_path $HOME/.bun/bin
+end
 
 set -Ux EDITOR nvim
 set -Ux VISUAL nvim
