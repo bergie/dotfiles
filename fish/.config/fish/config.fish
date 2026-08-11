@@ -15,7 +15,15 @@ if test -d /opt/homebrew/Cellar/ruby@3.4/3.4.9/bin
   fish_add_path -p /opt/homebrew/Cellar/ruby@3.4/3.4.9/bin
 end
 if test -d $HOME/.local/bin
-  fish_add_path $HOME/.local/bin
+  if type -q fish_add_path
+    # Uses the modern, preferred method (Fish 3.2.0+)
+    fish_add_path $HOME/.local/bin
+  else
+    # Fallback for Fish 3.1.2 and older
+    if not contains $HOME/.local/bin $PATH
+        set -gx PATH $HOME/.local/bin $PATH
+    end
+  end
 end
 if test -d $HOME/.deno/bin
   fish_add_path $HOME/.deno/bin
