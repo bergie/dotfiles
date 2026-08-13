@@ -1,9 +1,9 @@
 if status is-interactive
-# Commands to run in interactive sessions can go here
-and type -q tmux
-and not set -q TMUX
-and not set -q SSH_CLIENT
-  exec tmux
+    and type -q tmux
+    and not set -q TMUX
+    and not string match -q -r '^(screen|tmux)' $TERM
+    and not set -q SSH_CLIENT
+    exec tmux
 end
 
 set fish_greeting
