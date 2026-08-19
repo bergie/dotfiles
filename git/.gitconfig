@@ -5,12 +5,25 @@
 [diff "odf"]
 	textconv = odt2txt
 [color]
-	diff = true
+	ui = auto
 [push]
-	default = matching
+	autoSetupRemote = true
 [core]
 	editor = vim
 [pull]
 	ff = only
+	rebase = true
+[fetch]
+	prune = true
+[rerere]
+	enabled = true
+[merge]
+	conflictstyle = zdiff3
+[diff]
+	algorithm = histogram
+[branch]
+	sort = -committerdate
+[core]
+	excludesfile = ~/.gitignore_global
 [init]
 	defaultBranch = main
