@@ -49,7 +49,7 @@
       - ruby
       - mosh
       - ledger
-      - mosquitto-clients
+      - mosquitto
       - postgresql
       - ansible
       - gnupg
@@ -79,6 +79,7 @@
       - bat
       - tree
       - starship
+      - mosh
     python_packages:
       - RNS
       - dacar

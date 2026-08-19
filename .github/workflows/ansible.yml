@@ -34,7 +34,10 @@ jobs:
         run: ansible-galaxy collection install -r requirements.yml
 
       - name: Run setup playbook
-        run: ansible-playbook -i localhost, -c local setup.yml --skip-tags skip-ci
+        run: |
+          export ANSIBLE_LOCAL_TEMP="$HOME/.ansible/tmp"
+          export ANSIBLE_REMOTE_TMP="$HOME/.ansible/tmp"
+          ansible-playbook -i localhost, -c local setup.yml -e "dotfiles_dir=$GITHUB_WORKSPACE" --skip-tags skip-ci
 
       - name: Smoke test - core tools
         run: |
@@ -100,6 +103,9 @@ jobs:
           test -L $HOME/.gitconfig
           test -L $HOME/.config/nvim
           test -L $HOME/.pi
+          echo "Checking symlinks point to GITHUB_WORKSPACE..."
+          readlink $HOME/.config/fish | grep -q "$GITHUB_WORKSPACE"
+          readlink $HOME/.tmux.conf | grep -q "$GITHUB_WORKSPACE"
 
       - name: Verify git submodule
-        run: test -d $HOME/dotfiles/nvim/.local/share/nvim/site/pack/plugins/start/tokyonight
+        run: test -d $GITHUB_WORKSPACE/nvim/.local/share/nvim/site/pack/plugins/start/tokyonight
