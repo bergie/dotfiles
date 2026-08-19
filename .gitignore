@@ -20,3 +20,7 @@ pi/.pi/agent/*
 !pi/.pi/agent/extensions/
 !pi/.pi/agent/themes/
 !pi/.pi/agent/prompts/
+
+# Ansible
+inventory.yml
+ansible.retry

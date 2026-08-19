@@ -25,7 +25,25 @@ $ docker pull bergie/shell
 
 ## Installation on host
 
-These dotfiles are easiest to deploy with [GNU Stow](https://www.gnu.org/software/stow/). Install it for the appropriate operating system:
+These dotfiles can be deployed in two ways:
+
+### Option 1: Ansible (recommended, cross-platform)
+
+A comprehensive Ansible playbook is available that installs developer tools **and** sets up dotfiles. It supports Linux, macOS, and Termux.
+
+```bash
+# Install Ansible requirements
+ansible-galaxy collection install -r requirements.yml
+
+# Run the full setup (packages + dotfiles)
+ansible-playbook -i localhost, -c local setup.yml
+```
+
+See [ANSIBLE.md](ANSIBLE.md) for detailed documentation.
+
+### Option 2: GNU Stow (traditional)
+
+Install stow for your operating system:
 
 ```term
 $ sudo apt-get install stow # Debian derivatives

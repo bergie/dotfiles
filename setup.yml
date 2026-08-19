@@ -1,0 +1,332 @@
+---
+# Ansible playbook to set up development environment
+# Supports: Linux (Debian/Ubuntu), macOS, Termux
+# Usage: ansible-playbook -i localhost, -c local setup.yml
+
+- name: Set up development environment
+  hosts: localhost
+  become: "{{ ansible_os_family != 'Darwin' }}"
+  gather_facts: true
+  vars:
+    dotfiles_dir: "{{ ansible_user_dir }}/dotfiles"
+    developer_packages:
+      # Common tools
+      - git
+      - curl
+      - wget
+      - tmux
+      - jq
+      - rsync
+      # Editors
+      - neovim
+      - fish
+      # Build tools
+      - "{{ 'build-essential' if ansible_os_family == 'Debian' else omit }}"
+      # Languages
+      - python3
+      - python3-pip
+      - ruby
+      - ruby-dev
+      # Utilities
+      - psmisc
+      - ledger
+      - mosh
+      - mosquitto-clients
+      - postgresql-client
+      - ansible
+    # Platform-specific package maps
+    debian_packages:
+      - build-essential
+      - software-properties-common
+      - psmisc
+      - curl
+      - git
+      - wget
+      - tmux
+      - neovim
+      - fish
+      - ledger
+      - mosh
+      - ruby
+      - ruby-dev
+      - python3-pip
+      - mosquitto-clients
+      - postgresql-client
+      - jq
+      - rsync
+      - ansible
+      - gnupg
+      - sops
+      - ripgrep
+      - fd-find
+      - fzf
+      - bat
+      - tree
+    darwin_packages:
+      - git
+      - curl
+      - wget
+      - tmux
+      - jq
+      - rsync
+      - neovim
+      - fish
+      - ruby
+      - mosh
+      - ledger
+      - mosquitto-clients
+      - postgresql
+      - ansible
+      - gnupg
+      - sops
+      - ripgrep
+      - fd
+      - fzf
+      - bat
+      - tree
+    termux_packages:
+      - git
+      - curl
+      - wget
+      - tmux
+      - jq
+      - rsync
+      - neovim
+      - fish
+      - python
+      - ruby
+      - nodejs
+      - openssh
+      - mosh-server
+      - postgresql
+      - gnupg
+      - ripgrep
+      - fd
+      - fzf
+      - bat
+      - tree
+    python_packages:
+      - RNS
+      - dacar
+    node_version: "24"
+    starship_version: "v1.26.0"
+
+  pre_tasks:
+    - name: Display system information
+      debug:
+        msg:
+          - "OS: {{ ansible_distribution }} {{ ansible_distribution_version }}"
+          - "Family: {{ ansible_os_family }}"
+          - "Arch: {{ ansible_architecture }}"
+          - "Package manager: {{ ansible_pkg_mgr }}"
+
+  tasks:
+    # ============================================================
+    # System packages
+    # ============================================================
+
+    - name: Update apt cache (Debian/Ubuntu)
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+      when: ansible_os_family == 'Debian'
+
+    - name: Install packages via apt (Debian/Ubuntu)
+      ansible.builtin.apt:
+        name: "{{ debian_packages }}"
+        state: present
+      when: ansible_os_family == 'Debian'
+
+    - name: Install packages via homebrew (macOS)
+      community.general.homebrew:
+        name: "{{ darwin_packages }}"
+        state: present
+      when: ansible_os_family == 'Darwin'
+
+    - name: Install packages via pkg (Termux)
+      ansible.builtin.command:
+        cmd: "pkg install -y {{ termux_packages | join(' ') }}"
+      register: termux_install
+      changed_when: "'up-to-date' not in termux_install.stdout | default('')"
+      when: "'termux' in ansible_system_image | default('') or ansible_env.TERMUX_VERSION is defined"
+
+    # ============================================================
+    # Python packages
+    # ============================================================
+
+    - name: Install Python packages via pip
+      ansible.builtin.pip:
+        name: "{{ python_packages }}"
+        state: present
+        extra_args: "{{ '--break-system-packages' if ansible_os_family == 'Debian' else '' }}"
+      when: ansible_os_family != 'Darwin'
+
+    - name: Install Python packages via pip3 on macOS
+      ansible.builtin.pip:
+        name: "{{ python_packages }}"
+        state: present
+      when: ansible_os_family == 'Darwin'
+
+    # ============================================================
+    # Node.js
+    # ============================================================
+
+    - name: Check if Node.js is installed
+      ansible.builtin.command:
+        cmd: node --version
+      register: node_version_check
+      changed_when: false
+      failed_when: false
+
+    - name: Install Node.js via nvm (Linux)
+      block:
+        - name: Check if nvm is installed
+          ansible.builtin.stat:
+            path: "{{ ansible_user_dir }}/.nvm/nvm.sh"
+          register: nvm_stat
+
+        - name: Install nvm
+          ansible.builtin.shell:
+            cmd: |
+              curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash
+          when: not nvm_stat.stat.exists
+
+        - name: Install Node.js {{ node_version }} via nvm
+          ansible.builtin.shell: |
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm install {{ node_version }}
+            nvm alias default {{ node_version }}
+          when: not nvm_stat.stat.exists or node_version_check.rc != 0
+      when: ansible_os_family == 'Debian'
+
+    - name: Install Node.js via homebrew (macOS)
+      community.general.homebrew:
+        name: node
+        state: present
+      when: ansible_os_family == 'Darwin'
+
+    # Node.js is already installed via pkg in Termux
+
+    # ============================================================
+    # Starship prompt
+    # ============================================================
+
+    - name: Determine Starship architecture
+      ansible.builtin.set_fact:
+        starship_arch: >-
+          {{ 'x86_64-unknown-linux-musl'
+             if ansible_system == 'Linux' and ansible_architecture == 'x86_64'
+             else 'aarch64-unknown-linux-musl'
+             if ansible_system == 'Linux' and ansible_architecture == 'aarch64'
+             else 'x86_64-apple-darwin'
+             if ansible_os_family == 'Darwin' and ansible_architecture == 'x86_64'
+             else 'aarch64-apple-darwin'
+             if ansible_os_family == 'Darwin' and ansible_architecture == 'arm64'
+             else 'x86_64-unknown-linux-musl' }}
+
+    - name: Download and install Starship
+      ansible.builtin.unarchive:
+        src: "https://github.com/starship/starship/releases/download/{{ starship_version }}/starship-{{ starship_arch }}.tar.gz"
+        dest: "{{ ansible_user_dir }}/.local/bin"
+        remote_src: true
+        mode: "0755"
+        creates: "{{ ansible_user_dir }}/.local/bin/starship"
+
+    - name: Ensure .local/bin directory exists
+      ansible.builtin.file:
+        path: "{{ ansible_user_dir }}/.local/bin"
+        state: directory
+        mode: "0755"
+
+    # ============================================================
+    # Ruby gems
+    # ============================================================
+
+    - name: Install Bundler
+      ansible.builtin.gem:
+        name: bundler
+        state: present
+      tags: skip-ci
+
+    # ============================================================
+    # Pi coding agent
+    # ============================================================
+
+    - name: Install Pi coding agent globally
+      ansible.builtin.npm:
+        name: "@earendil-works/pi-coding-agent"
+        global: true
+        ignore_scripts: true
+      tags: skip-ci
+
+    - name: Install Pi packages
+      ansible.builtin.command:
+        cmd: "pi install {{ item }}"
+      loop:
+        - "npm:pi-glm-usage"
+        - "npm:pi-rngit-work-document-skill"
+      register: pi_install
+      changed_when: "'already installed' not in pi_install.stdout | default('')"
+      failed_when: pi_install.rc != 0 and 'already installed' not in pi_install.stdout | default('')
+      tags: skip-ci
+
+    # ============================================================
+    # Dotfiles setup
+    # ============================================================
+
+    - name: Check if dotfiles directory exists
+      ansible.builtin.stat:
+        path: "{{ dotfiles_dir }}"
+      register: dotfiles_stat
+
+    - name: Fail if dotfiles directory doesn't exist
+      ansible.builtin.fail:
+        msg: |
+          Dotfiles directory {{ dotfiles_dir }} does not exist.
+          Please clone the repository first:
+          git clone <repo-url> ~/dotfiles
+      when: not dotfiles_stat.stat.exists
+
+    - name: Initialize and update git submodules
+      community.general.git_submodules:
+        repo_path: "{{ dotfiles_dir }}"
+        update: true
+
+    - name: Ensure .config directory exists
+      ansible.builtin.file:
+        path: "{{ ansible_user_dir }}/.config"
+        state: directory
+        mode: "0755"
+
+    - name: Create stow-like symlinks
+      ansible.builtin.file:
+        src: "{{ dotfiles_dir }}/{{ item.src }}"
+        dest: "{{ ansible_user_dir }}/{{ item.dest }}"
+        state: link
+        force: true
+      loop:
+        # fish
+        - { src: fish/.config/fish, dest: .config/fish }
+        - { src: fish/.tmux.conf, dest: .tmux.conf }
+        # git
+        - { src: git/.gitconfig, dest: .gitconfig }
+        # nvim
+        - { src: nvim/.config/nvim, dest: .config/nvim }
+        - { src: nvim/.local/share/nvim, dest: .local/share/nvim }
+        # pi
+        - { src: pi/.pi, dest: .pi }
+
+  post_tasks:
+    - name: Display completion message
+      ansible.builtin.debug:
+        msg:
+          - ""
+          - "✓ Development environment setup complete!"
+          - ""
+          - "Next steps:"
+          - "  1. Add Starship to your shell config:"
+          - "     fish: starship init fish | source"
+          - "     bash: eval \"$(starship init bash)\""
+          - "  2. Restart your shell or source the config"
+          - "  3. Enjoy your new development environment!"

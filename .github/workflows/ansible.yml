@@ -1,0 +1,101 @@
+name: Ansible
+
+on: [push, pull_request]
+
+jobs:
+  smoketest:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Install Ansible (Ubuntu)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ansible python3-pip
+        if: matrix.os == 'ubuntu-latest'
+
+      - name: Install Ansible (macOS)
+        run: |
+          brew install ansible
+        if: matrix.os == 'macos-latest'
+
+      - name: Install required collections
+        run: ansible-galaxy collection install -r requirements.yml
+
+      - name: Run setup playbook
+        run: ansible-playbook -i localhost, -c local setup.yml --skip-tags skip-ci
+
+      - name: Smoke test - core tools
+        run: |
+          git --version
+          curl --version
+          wget --version
+          tmux -V
+          jq --version
+          rsync --version
+
+      - name: Smoke test - editors
+        run: |
+          nvim --version
+          fish --version
+
+      - name: Smoke test - languages
+        run: |
+          python3 --version
+          ruby --version
+
+      - name: Smoke test - Node.js
+        run: |
+          node --version
+          npm --version
+
+      - name: Smoke test - CLI tools
+        run: |
+          rg --version
+          fd --version
+          fzf --version
+          bat --version
+          tree --version
+
+      - name: Smoke test - gnupg and sops
+        run: |
+          gpg --version
+          sops --version
+
+      - name: Smoke test - ansible
+        run: ansible --version
+
+      - name: Smoke test - Python packages
+        run: |
+          python3 -c "import RNS; print('RNS OK')"
+          python3 -c "import dacar; print('dacar OK')"
+
+      - name: Smoke test - Ruby gems
+        run: bundle --version
+
+      - name: Smoke test - Starship
+        run: |
+          starship --version
+          test -f $HOME/.local/bin/starship
+
+      - name: Smoke test - Pi agent
+        run: pi --version || echo "Pi may need additional setup"
+        continue-on-error: true
+
+      - name: Verify dotfiles symlinks
+        run: |
+          test -L $HOME/.config/fish
+          test -L $HOME/.tmux.conf
+          test -L $HOME/.gitconfig
+          test -L $HOME/.config/nvim
+          test -L $HOME/.pi
+
+      - name: Verify git submodule
+        run: test -d $HOME/dotfiles/nvim/.local/share/nvim/site/pack/plugins/start/tokyonight

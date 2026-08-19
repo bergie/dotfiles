@@ -1,0 +1,26 @@
+---
+# Example inventory for remote hosts
+
+[local]
+localhost ansible_connection=local
+
+[termux]
+# Add Termux devices (accessible via SSH)
+# Format: hostname ansible_host=IP ansible_port=PORT
+# example: phone ansible_host=192.168.1.100 ansible_port=8022
+
+[linux]
+# Add Linux hosts
+# Format: hostname ansible_host=IP ansible_user=USER
+# example: server ansible_host=192.168.1.101 ansible_user=ubuntu
+
+[macos]
+# Add macOS hosts
+# Format: hostname ansible_host=IP ansible_user=USER
+# example: macbook ansible_host=192.168.1.102 ansible_user=bergie
+
+[all:vars]
+# Global variables
+# dotfiles_dir=/custom/path/to/dotfiles
+# node_version=20
+# starship_version=v1.20.0

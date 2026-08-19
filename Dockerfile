@@ -53,7 +53,14 @@ RUN apt-get update && apt-get install -y \
       postgresql-client \
       jq \
       rsync \
-      ansible && \
+      ansible \
+      gnupg \
+      sops \
+      ripgrep \
+      fd-find \
+      fzf \
+      bat \
+      tree && \
   rm -rf /var/lib/apt/lists/*
 
 # Install Reticulum and dacar for rngit
