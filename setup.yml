@@ -122,6 +122,12 @@
       become: true
       when: ansible_facts['os_family'] == 'Debian'
 
+    - name: Ensure .local/bin directory exists
+      ansible.builtin.file:
+        path: "{{ home_dir }}/.local/bin"
+        state: directory
+        mode: "0755"
+
     - name: Check if Debian tools exist (for symlinks)
       ansible.builtin.stat:
         path: "{{ item.src }}"
@@ -234,12 +240,6 @@
     # ============================================================
     # Starship prompt
     # ============================================================
-
-    - name: Ensure .local/bin directory exists
-      ansible.builtin.file:
-        path: "{{ home_dir }}/.local/bin"
-        state: directory
-        mode: "0755"
 
     - name: Install starship via pkg (Termux)
       ansible.builtin.command:
