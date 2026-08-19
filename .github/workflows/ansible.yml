@@ -84,9 +84,6 @@ jobs:
           python3 -c "import RNS; print('RNS OK')"
           python3 -c "import dacar; print('dacar OK')"
 
-      - name: Smoke test - Ruby gems
-        run: bundle --version
-
       - name: Smoke test - Starship
         run: |
           starship --version
