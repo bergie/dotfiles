@@ -63,12 +63,16 @@ RUN gem install bundler --no-document
 # Create non-root user
 RUN useradd -m -s /usr/bin/fish -u 1000 bergie
 
-# Set up dotfiles
+# Set up dotfiles (for user bergie)
 COPY --chown=bergie:bergie ./fish/* /home/bergie/.config/fish/
 COPY --chown=bergie:bergie ./nvim/ /home/bergie/.config/nvim/
 COPY --chown=bergie:bergie ./git/* /home/bergie/
 COPY --chown=bergie:bergie ./pi/.pi/agent/AGENTS.md /home/bergie/.pi/agent/AGENTS.md
 COPY --chown=bergie:bergie ./pi/.pi/agent/settings.json /home/bergie/.pi/agent/settings.json
+
+# Copy pi config for root (used during build)
+COPY ./pi/.pi/agent/AGENTS.md /root/.pi/agent/AGENTS.md
+COPY ./pi/.pi/agent/settings.json /root/.pi/agent/settings.json
 
 # Preinstall pi packages so the image works out of the box
 RUN pi install npm:pi-glm-usage && \
