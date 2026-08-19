@@ -1,13 +1,17 @@
-FROM ubuntu:latest
+# Node.js stage for multi-stage build
+FROM node:24-bookworm-slim AS node
+
+FROM ubuntu:24.04
 ARG DEBIAN_FRONTEND=noninteractive
 
-# Locales, timezone, and common packages
+# Locales and timezone
 RUN apt-get update && apt-get install -y \
       locales \
       tzdata && \
   echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
   locale-gen --purge "en_US.UTF-8" && \
   dpkg-reconfigure --frontend=noninteractive locales && \
+  update-locale LANG="en_US.UTF-8" LC_ALL="en_US.UTF-8" LANGUAGE="en_US.UTF-8" && \
   echo "Etc/UTC" > /etc/timezone && \
   rm /etc/localtime && \
   ln -snf /usr/share/zoneinfo/Etc/UTC /etc/localtime && \
@@ -15,11 +19,6 @@ RUN apt-get update && apt-get install -y \
   rm -rf /var/lib/apt/lists/*
 
 ENV LANG="en_US.UTF-8" LC_ALL="en_US.UTF-8" LANGUAGE="en_US.UTF-8"
-
-RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
-  locale-gen --purge $LANG && \
-    dpkg-reconfigure --frontend=noninteractive locales && \
-    update-locale LANG=$LANG LC_ALL=$LC_ALL LANGUAGE=$LANGUAGE
 
 # Common packages
 RUN apt-get update && apt-get install -y \
@@ -45,9 +44,11 @@ RUN apt-get update && apt-get install -y \
       ansible && \
   rm -rf /var/lib/apt/lists/*
 
-# Install Node.js LTS
-RUN curl -sL https://deb.nodesource.com/setup_24.x | bash -
-RUN apt-get install -y nodejs
+# Install Node.js from multi-stage build
+COPY --from=node /usr/local/bin/node /usr/local/bin/node
+COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
+RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm && \
+    ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
 
 # Install pi coding agent
 RUN npm install -g --ignore-scripts @earendil-works/pi-coding-agent
