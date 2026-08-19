@@ -5,7 +5,7 @@ Mostly used for Node.js and IoT development.
 
 ## Running via Docker
 
-There is a Docker image available for this setup. Run it with:
+There is a multi-arch Docker image available for this setup (linux/amd64, linux/arm64). Run it with:
 
 ```shell
 $ docker run -v ~/Projects:/projects -v workstation:/root -v ~/.ssh:/keys --name workstation --rm -it bergie/shell

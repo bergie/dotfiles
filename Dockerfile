@@ -1,7 +1,7 @@
 # Node.js stage for multi-stage build
 FROM node:24-bookworm-slim AS node
 
-FROM ubuntu:24.04
+FROM ubuntu:26.04
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Locales and timezone
