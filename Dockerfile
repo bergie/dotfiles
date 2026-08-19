@@ -44,7 +44,7 @@ RUN npm install -g --ignore-scripts @earendil-works/pi-coding-agent
 # Install Bundler
 RUN gem install bundler --no-document
 
-# Install oh-my-zsh
+# Set fish as the default shell
 RUN chsh -s /usr/bin/fish
 
 # Set up timezone
