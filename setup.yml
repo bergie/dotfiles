@@ -23,8 +23,6 @@
       - fish
       - ledger
       - mosh
-      - ruby
-      - ruby-dev
       - python3-pip
       - mosquitto-clients
       - postgresql-client
@@ -46,7 +44,6 @@
       - rsync
       - neovim
       - fish
-      - ruby
       - mosh
       - ledger
       - mosquitto
@@ -68,7 +65,6 @@
       - neovim
       - fish
       - python
-      - ruby
       - nodejs
       - openssh
       - postgresql
@@ -100,6 +96,13 @@
           - "Package manager: {{ ansible_facts['pkg_mgr'] }}"
           - "Termux: {{ ansible_env.TERMUX_VERSION is defined }}"
 
+    - name: Install packaging library (Ansible pip module dependency)
+      ansible.builtin.command:
+        cmd: "{{ ansible_python.executable }} -m pip install packaging --break-system-packages --user"
+      register: packaging_install
+      changed_when: "'Successfully installed' in packaging_install.stdout"
+      failed_when: "packaging_install.rc != 0 and 'Requirement already satisfied' not in packaging_install.stdout"
+
   tasks:
     # ============================================================
     # System packages
@@ -119,6 +122,18 @@
       become: true
       when: ansible_facts['os_family'] == 'Debian'
 
+    - name: Create tool symlinks on Debian/Ubuntu (packages have different names)
+      ansible.builtin.file:
+        src: "{{ item.src }}"
+        dest: "{{ home_dir }}/.local/bin/{{ item.name }}"
+        state: link
+      loop:
+        - { src: /usr/bin/fdfind, name: fd }
+        - { src: /usr/bin/batcat, name: bat }
+      when:
+        - ansible_facts['os_family'] == 'Debian'
+        - ansible_facts['distribution'] != 'Termux'
+
     - name: Install packages via homebrew (macOS)
       community.general.homebrew:
         name: "{{ darwin_packages }}"
@@ -136,12 +151,6 @@
     # Python packages
     # ============================================================
 
-    - name: Install pip dependencies (packaging library)
-      ansible.builtin.pip:
-        name: packaging
-        state: present
-      when: ansible_facts['os_family'] == 'Darwin'
-
     - name: Install Python packages via pip (Debian/Ubuntu)
       ansible.builtin.pip:
         name: "{{ python_packages }}"
@@ -153,6 +162,7 @@
       ansible.builtin.pip:
         name: "{{ python_packages }}"
         state: present
+        extra_args: --break-system-packages --user
       when: ansible_facts['os_family'] == 'Darwin'
 
     - name: Install Python packages via pip (Termux)
@@ -242,13 +252,27 @@
              else 'x86_64-unknown-linux-musl' }}
       when: "'termux' not in ansible_facts['system_image'] | default('') and ansible_env.TERMUX_VERSION is not defined"
 
-    - name: Download and install Starship
-      ansible.builtin.unarchive:
-        src: "https://github.com/starship/starship/releases/download/{{ starship_version }}/starship-{{ starship_arch }}.tar.gz"
-        dest: "{{ home_dir }}/.local/bin"
-        remote_src: true
-        mode: "0755"
+    - name: Download Starship
+      ansible.builtin.get_url:
+        url: "https://github.com/starship/starship/releases/download/{{ starship_version }}/starship-{{ starship_arch }}.tar.gz"
+        dest: "/tmp/starship-{{ starship_arch }}.tar.gz"
+        mode: "0644"
+      when:
+        - "'termux' not in ansible_facts['system_image'] | default('')"
+        - ansible_env.TERMUX_VERSION is not defined
+
+    - name: Extract and install Starship
+      ansible.builtin.command:
+        cmd: "tar -xzf /tmp/starship-{{ starship_arch }}.tar.gz -C {{ home_dir }}/.local/bin starship"
         creates: "{{ home_dir }}/.local/bin/starship"
+      when:
+        - "'termux' not in ansible_facts['system_image'] | default('')"
+        - ansible_env.TERMUX_VERSION is not defined
+
+    - name: Set Starship executable permissions
+      ansible.builtin.file:
+        path: "{{ home_dir }}/.local/bin/starship"
+        mode: "0755"
       when:
         - "'termux' not in ansible_facts['system_image'] | default('')"
         - ansible_env.TERMUX_VERSION is not defined
@@ -297,16 +321,6 @@
       changed_when: "'up-to-date' not in termux_sops.stdout | default('')"
       failed_when: false
       when: "'termux' in ansible_facts['system_image'] | default('') or ansible_env.TERMUX_VERSION is defined"
-
-    # ============================================================
-    # Ruby gems
-    # ============================================================
-
-    - name: Install Bundler
-      ansible.builtin.gem:
-        name: bundler
-        state: present
-      tags: skip-ci
 
     # ============================================================
     # Pi coding agent

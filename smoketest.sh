@@ -20,7 +20,6 @@ fish --version
 echo ""
 echo "=== Languages ==="
 python3 --version
-ruby --version
 
 echo ""
 echo "=== Node.js ==="
@@ -48,10 +47,6 @@ echo ""
 echo "=== Python Packages ==="
 python3 -c "import RNS; print('RNS OK')"
 python3 -c "import dacar; print('dacar OK')"
-
-echo ""
-echo "=== Ruby Gems ==="
-bundle --version
 
 echo ""
 echo "=== Starship ==="

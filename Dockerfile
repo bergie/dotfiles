@@ -53,8 +53,6 @@ RUN apt-get update && apt-get install -y \
       neovim \
       fish \
       ledger \
-      ruby \
-      ruby-dev \
       python3-pip \
       mosh \
       mosquitto \
@@ -93,9 +91,6 @@ COPY --from=sops /usr/local/bin/sops /usr/local/bin/sops
 
 # Install pi coding agent
 RUN npm install -g --ignore-scripts @earendil-works/pi-coding-agent
-
-# Install Bundler
-RUN gem install bundler --no-document
 
 # Create non-root user (rename ubuntu user to bergie to avoid UID 1000 collision)
 RUN usermod -l bergie -d /home/bergie -m -s /usr/bin/fish ubuntu && \
