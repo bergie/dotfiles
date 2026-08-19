@@ -54,3 +54,9 @@ end
 if type -q starship
   starship init fish | source
 end
+
+# Termux-specific: Ansible temp directories (Android W^X restrictions)
+if test -n "$TERMUX_VERSION"
+  set -gx ANSIBLE_LOCAL_TEMP "$PREFIX/tmp/.ansible/tmp"
+  set -gx ANSIBLE_REMOTE_TMP "$PREFIX/tmp/.ansible/tmp"
+end

@@ -39,6 +39,12 @@ ansible-galaxy collection install -r requirements.yml
 ansible-playbook -i localhost, -c local setup.yml
 ```
 
+**Note for Termux users:** Set these environment variables before running (Android W^X restrictions):
+```bash
+export ANSIBLE_LOCAL_TEMP="$PREFIX/tmp/.ansible/tmp"
+export ANSIBLE_REMOTE_TMP="$PREFIX/tmp/.ansible/tmp"
+```
+
 ### Option 2: GNU Stow (traditional)
 
 Install stow for your operating system:

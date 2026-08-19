@@ -53,10 +53,10 @@ RUN apt-get update && apt-get install -y \
       neovim \
       fish \
       ledger \
-      mosh \
       ruby \
       ruby-dev \
       python3-pip \
+      mosh \
       mosquitto \
       mosquitto-clients \
       postgresql-client \

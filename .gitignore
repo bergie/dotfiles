@@ -24,3 +24,5 @@ pi/.pi/agent/*
 # Ansible
 inventory.yml
 ansible.retry
+ansible.cfg
+~/.ansible/tmp/
