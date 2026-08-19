@@ -1,8 +1,19 @@
 FROM ubuntu:latest
-ENV DEBIAN_FRONTEND=noninteractive
+ARG DEBIAN_FRONTEND=noninteractive
 
-# Locales
-RUN apt-get update && apt-get install -y locales
+# Locales, timezone, and common packages
+RUN apt-get update && apt-get install -y \
+      locales \
+      tzdata && \
+  echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
+  locale-gen --purge "en_US.UTF-8" && \
+  dpkg-reconfigure --frontend=noninteractive locales && \
+  echo "Etc/UTC" > /etc/timezone && \
+  rm /etc/localtime && \
+  ln -snf /usr/share/zoneinfo/Etc/UTC /etc/localtime && \
+  dpkg-reconfigure -f noninteractive tzdata && \
+  rm -rf /var/lib/apt/lists/*
+
 ENV LANG="en_US.UTF-8" LC_ALL="en_US.UTF-8" LANGUAGE="en_US.UTF-8"
 
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
@@ -14,7 +25,6 @@ RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
 RUN apt-get update && apt-get install -y \
       build-essential \
       software-properties-common \
-      tzdata \
       psmisc \
       curl \
       git \
@@ -32,7 +42,8 @@ RUN apt-get update && apt-get install -y \
       postgresql-client \
       jq \
       rsync \
-      ansible
+      ansible && \
+  rm -rf /var/lib/apt/lists/*
 
 # Install Node.js LTS
 RUN curl -sL https://deb.nodesource.com/setup_24.x | bash -
@@ -47,12 +58,7 @@ RUN gem install bundler --no-document
 # Set fish as the default shell
 RUN chsh -s /usr/bin/fish
 
-# Set up timezone
-ENV TZ 'Etc/UTC'
-RUN echo $TZ > /etc/timezone && \
-    rm /etc/localtime && \
-    ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
-    dpkg-reconfigure -f noninteractive tzdata
+
 
 # Set up dotfiles
 COPY ./fish/* /root/
