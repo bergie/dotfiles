@@ -8,7 +8,7 @@ Mostly used for Node.js and IoT development.
 There is a multi-arch Docker image available for this setup (linux/amd64, linux/arm64). Run it with:
 
 ```shell
-$ docker run -v ~/Projects:/projects -v workstation:/root -v ~/.ssh:/keys --name workstation --rm -it bergie/shell
+$ docker run -v ~/Projects:/projects -v workstation:/home/bergie -v ~/.ssh:/keys --name workstation --rm -it bergie/shell
 ```
 
 ### Updating the container
