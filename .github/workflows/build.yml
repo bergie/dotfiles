@@ -39,6 +39,7 @@ jobs:
             -t bergie/shell:test .
           docker run --rm bergie/shell:test node --version
           docker run --rm bergie/shell:test starship --version
+          docker run --rm bergie/shell:test sops --version
           docker run --rm bergie/shell:test sh -c "id -un && ls /home/bergie/.pi/agent"
 
   release:

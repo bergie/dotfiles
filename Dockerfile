@@ -13,6 +13,15 @@ RUN apk add --no-cache curl && \
     curl -sSL "https://github.com/starship/starship/releases/download/${STARSHIP_VERSION}/starship-${ARCH}.tar.gz" \
     | tar xz -C /usr/local/bin starship
 
+# sops stage for multi-stage build
+FROM alpine:3 AS sops
+ARG SOPS_VERSION=v3.13.3
+ARG TARGETARCH
+RUN apk add --no-cache curl && \
+    curl -sSL -o /usr/local/bin/sops \
+      "https://github.com/getsops/sops/releases/download/${SOPS_VERSION}/sops-${SOPS_VERSION}.linux.${TARGETARCH}" && \
+    chmod +x /usr/local/bin/sops
+
 FROM ubuntu:26.04
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -55,13 +64,17 @@ RUN apt-get update && apt-get install -y \
       rsync \
       ansible \
       gnupg \
-      sops \
       ripgrep \
       fd-find \
       fzf \
       bat \
       tree && \
   rm -rf /var/lib/apt/lists/*
+
+# Install sops from GitHub releases (not in Ubuntu apt)
+RUN curl -sSL https://github.com/getsops/sops/releases/download/v3.9.0/sops-v3.9.0.linux.amd64 \
+    -o /usr/local/bin/sops && \
+  chmod +x /usr/local/bin/sops
 
 # Install Reticulum and dacar for rngit
 RUN pip3 install --break-system-packages RNS dacar
@@ -74,6 +87,9 @@ RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm && \
 
 # Install starship from multi-stage build
 COPY --from=starship /usr/local/bin/starship /usr/local/bin/starship
+
+# Install sops from multi-stage build
+COPY --from=sops /usr/local/bin/sops /usr/local/bin/sops
 
 # Install pi coding agent
 RUN npm install -g --ignore-scripts @earendil-works/pi-coding-agent

@@ -39,8 +39,6 @@ ansible-galaxy collection install -r requirements.yml
 ansible-playbook -i localhost, -c local setup.yml
 ```
 
-See [ANSIBLE.md](ANSIBLE.md) for detailed documentation.
-
 ### Option 2: GNU Stow (traditional)
 
 Install stow for your operating system:

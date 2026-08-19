@@ -5,35 +5,10 @@
 
 - name: Set up development environment
   hosts: localhost
-  become: "{{ ansible_os_family != 'Darwin' }}"
+  become: "{{ ansible_os_family != 'Darwin' and ansible_env.TERMUX_VERSION is not defined }}"
   gather_facts: true
   vars:
     dotfiles_dir: "{{ ansible_user_dir }}/dotfiles"
-    developer_packages:
-      # Common tools
-      - git
-      - curl
-      - wget
-      - tmux
-      - jq
-      - rsync
-      # Editors
-      - neovim
-      - fish
-      # Build tools
-      - "{{ 'build-essential' if ansible_os_family == 'Debian' else omit }}"
-      # Languages
-      - python3
-      - python3-pip
-      - ruby
-      - ruby-dev
-      # Utilities
-      - psmisc
-      - ledger
-      - mosh
-      - mosquitto-clients
-      - postgresql-client
-      - ansible
     # Platform-specific package maps
     debian_packages:
       - build-essential
@@ -56,7 +31,6 @@
       - rsync
       - ansible
       - gnupg
-      - sops
       - ripgrep
       - fd-find
       - fzf
@@ -78,7 +52,6 @@
       - postgresql
       - ansible
       - gnupg
-      - sops
       - ripgrep
       - fd
       - fzf
@@ -105,11 +78,16 @@
       - fzf
       - bat
       - tree
+      - starship
     python_packages:
       - RNS
       - dacar
+    pi_packages:
+      - "npm:pi-glm-usage"
+      - "npm:pi-rngit-work-document-skill"
     node_version: "24"
     starship_version: "v1.26.0"
+    sops_version: "v3.13.3"
 
   pre_tasks:
     - name: Display system information
@@ -119,6 +97,7 @@
           - "Family: {{ ansible_os_family }}"
           - "Arch: {{ ansible_architecture }}"
           - "Package manager: {{ ansible_pkg_mgr }}"
+          - "Termux: {{ ansible_env.TERMUX_VERSION is defined }}"
 
   tasks:
     # ============================================================
@@ -154,31 +133,46 @@
     # Python packages
     # ============================================================
 
-    - name: Install Python packages via pip
+    - name: Install Python packages via pip (Debian/Ubuntu)
       ansible.builtin.pip:
         name: "{{ python_packages }}"
         state: present
-        extra_args: "{{ '--break-system-packages' if ansible_os_family == 'Debian' else '' }}"
-      when: ansible_os_family != 'Darwin'
+        extra_args: "--break-system-packages"
+      when: ansible_os_family == 'Debian'
 
-    - name: Install Python packages via pip3 on macOS
+    - name: Install Python packages via pip (macOS)
       ansible.builtin.pip:
         name: "{{ python_packages }}"
         state: present
       when: ansible_os_family == 'Darwin'
 
+    - name: Install Python packages via pip (Termux)
+      ansible.builtin.pip:
+        name: "{{ python_packages }}"
+        state: present
+      when: "'termux' in ansible_system_image | default('') or ansible_env.TERMUX_VERSION is defined"
+
     # ============================================================
     # Node.js
     # ============================================================
 
-    - name: Check if Node.js is installed
-      ansible.builtin.command:
-        cmd: node --version
+    - name: Check installed Node.js version
+      ansible.builtin.command: node --version
       register: node_version_check
       changed_when: false
       failed_when: false
 
-    - name: Install Node.js via nvm (Linux)
+    - name: Parse Node.js version
+      ansible.builtin.set_fact:
+        installed_node_version: "{{ node_version_check.stdout | regex_replace('^v', '') }}"
+      when: node_version_check.rc == 0
+
+    - name: Check if Node.js version matches desired
+      ansible.builtin.set_fact:
+        node_version_matches: "{{ installed_node_version.startswith(node_version) if installed_node_version is defined else false }}"
+      when: node_version_check.rc == 0
+
+    - name: Install Node.js via nvm (Debian/Ubuntu)
       block:
         - name: Check if nvm is installed
           ansible.builtin.stat:
@@ -197,12 +191,12 @@
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             nvm install {{ node_version }}
             nvm alias default {{ node_version }}
-          when: not nvm_stat.stat.exists or node_version_check.rc != 0
+          when: not nvm_stat.stat.exists or not node_version_matches | default(false)
       when: ansible_os_family == 'Debian'
 
     - name: Install Node.js via homebrew (macOS)
       community.general.homebrew:
-        name: node
+        name: node@{{ node_version }}
         state: present
       when: ansible_os_family == 'Darwin'
 
@@ -211,6 +205,19 @@
     # ============================================================
     # Starship prompt
     # ============================================================
+
+    - name: Ensure .local/bin directory exists
+      ansible.builtin.file:
+        path: "{{ ansible_user_dir }}/.local/bin"
+        state: directory
+        mode: "0755"
+
+    - name: Install starship via pkg (Termux)
+      ansible.builtin.command:
+        cmd: "pkg install -y starship"
+      register: termux_starship
+      changed_when: "'up-to-date' not in termux_starship.stdout | default('')"
+      when: "'termux' in ansible_system_image | default('') or ansible_env.TERMUX_VERSION is defined"
 
     - name: Determine Starship architecture
       ansible.builtin.set_fact:
@@ -224,6 +231,7 @@
              else 'aarch64-apple-darwin'
              if ansible_os_family == 'Darwin' and ansible_architecture == 'arm64'
              else 'x86_64-unknown-linux-musl' }}
+      when: "'termux' not in ansible_system_image | default('') and ansible_env.TERMUX_VERSION is not defined"
 
     - name: Download and install Starship
       ansible.builtin.unarchive:
@@ -232,12 +240,54 @@
         remote_src: true
         mode: "0755"
         creates: "{{ ansible_user_dir }}/.local/bin/starship"
+      when:
+        - "'termux' not in ansible_system_image | default('')"
+        - ansible_env.TERMUX_VERSION is not defined
 
-    - name: Ensure .local/bin directory exists
-      ansible.builtin.file:
-        path: "{{ ansible_user_dir }}/.local/bin"
-        state: directory
+    # ============================================================
+    # sops (not in default apt repos)
+    # ============================================================
+
+    - name: Determine sops architecture
+      ansible.builtin.set_fact:
+        sops_arch: >-
+          {{ 'linux.amd64'
+             if ansible_system == 'Linux' and ansible_architecture == 'x86_64'
+             else 'linux.arm64'
+             if ansible_system == 'Linux' and ansible_architecture == 'aarch64'
+             else 'darwin.amd64'
+             if ansible_os_family == 'Darwin' and ansible_architecture == 'x86_64'
+             else 'darwin.arm64'
+             if ansible_os_family == 'Darwin' and ansible_architecture == 'arm64'
+             else 'linux.amd64' }}
+
+    - name: Check if sops is installed
+      ansible.builtin.stat:
+        path: "{{ ansible_user_dir }}/.local/bin/sops"
+      register: sops_stat
+
+    - name: Download and install sops (Debian/Ubuntu - not in apt)
+      ansible.builtin.get_url:
+        url: "https://github.com/getsops/sops/releases/download/{{ sops_version }}/sops-{{ sops_version }}.{{ sops_arch }}"
+        dest: "{{ ansible_user_dir }}/.local/bin/sops"
         mode: "0755"
+      when:
+        - ansible_os_family == 'Debian'
+        - not sops_stat.stat.exists
+
+    - name: Install sops via homebrew (macOS)
+      community.general.homebrew:
+        name: sops
+        state: present
+      when: ansible_os_family == 'Darwin'
+
+    - name: Install sops via pkg (Termux)
+      ansible.builtin.command:
+        cmd: "pkg install -y sops"
+      register: termux_sops
+      changed_when: "'up-to-date' not in termux_sops.stdout | default('')"
+      failed_when: false
+      when: "'termux' in ansible_system_image | default('') or ansible_env.TERMUX_VERSION is defined"
 
     # ============================================================
     # Ruby gems
@@ -263,9 +313,7 @@
     - name: Install Pi packages
       ansible.builtin.command:
         cmd: "pi install {{ item }}"
-      loop:
-        - "npm:pi-glm-usage"
-        - "npm:pi-rngit-work-document-skill"
+      loop: "{{ pi_packages }}"
       register: pi_install
       changed_when: "'already installed' not in pi_install.stdout | default('')"
       failed_when: pi_install.rc != 0 and 'already installed' not in pi_install.stdout | default('')
@@ -289,9 +337,13 @@
       when: not dotfiles_stat.stat.exists
 
     - name: Initialize and update git submodules
-      community.general.git_submodules:
-        repo_path: "{{ dotfiles_dir }}"
-        update: true
+      ansible.builtin.git:
+        repo: "{{ dotfiles_dir }}"
+        dest: "{{ dotfiles_dir }}"
+        update: yes
+        submodules: yes
+        recursive: yes
+      delegate_to: localhost
 
     - name: Ensure .config directory exists
       ansible.builtin.file:
