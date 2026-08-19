@@ -34,7 +34,9 @@ jobs:
       -
         name: Smoke test (amd64)
         run: |
-          docker buildx build --platform linux/amd64 --load -t bergie/shell:test .
+          docker buildx build --platform linux/amd64 --load \
+            --cache-from type=gha \
+            -t bergie/shell:test .
           docker run --rm bergie/shell:test node --version
           docker run --rm bergie/shell:test sh -c "id -un && ls /home/bergie/.pi/agent"
 
