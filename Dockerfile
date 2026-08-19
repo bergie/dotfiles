@@ -60,8 +60,9 @@ RUN npm install -g --ignore-scripts @earendil-works/pi-coding-agent
 # Install Bundler
 RUN gem install bundler --no-document
 
-# Create non-root user
-RUN useradd -m -s /usr/bin/fish -u 1000 bergie
+# Create non-root user (rename ubuntu user to bergie to avoid UID 1000 collision)
+RUN usermod -l bergie -d /home/bergie -m -s /usr/bin/fish ubuntu && \
+    groupmod -n bergie ubuntu
 
 # Set up dotfiles (for user bergie)
 COPY --chown=bergie:bergie ./fish/* /home/bergie/.config/fish/
