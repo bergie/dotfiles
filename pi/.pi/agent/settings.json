@@ -6,6 +6,8 @@
   "defaultThinkingLevel": "medium",
   "packages": [
     "npm:pi-glm-usage",
-    "npm:pi-rngit-work-document-skill"
-  ]
+    "npm:pi-rngit-work-document-skill",
+    "npm:pi-theme-tokyo-night-storm-improved"
+  ],
+  "enableInstallTelemetry": false
 }
