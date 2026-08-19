@@ -56,23 +56,22 @@ RUN npm install -g --ignore-scripts @earendil-works/pi-coding-agent
 # Install Bundler
 RUN gem install bundler --no-document
 
-# Set fish as the default shell
-RUN chsh -s /usr/bin/fish
-
-
+# Create non-root user
+RUN useradd -m -s /usr/bin/fish -u 1000 bergie
 
 # Set up dotfiles
-COPY ./fish/* /root/
-COPY ./nvim/ /root/
-COPY ./git/* /root/
-COPY ./pi/.pi/agent/AGENTS.md /root/.pi/agent/AGENTS.md
-COPY ./pi/.pi/agent/settings.json /root/.pi/agent/settings.json
+COPY --chown=bergie:bergie ./fish/* /home/bergie/.config/fish/
+COPY --chown=bergie:bergie ./nvim/ /home/bergie/.config/nvim/
+COPY --chown=bergie:bergie ./git/* /home/bergie/
+COPY --chown=bergie:bergie ./pi/.pi/agent/AGENTS.md /home/bergie/.pi/agent/AGENTS.md
+COPY --chown=bergie:bergie ./pi/.pi/agent/settings.json /home/bergie/.pi/agent/settings.json
 
 # Preinstall pi packages so the image works out of the box
 RUN pi install npm:pi-glm-usage && \
     pi install npm:pi-rngit-work-document-skill
 
-# Set up volumes
+# Switch to non-root user
+USER bergie
 WORKDIR /projects
 VOLUME /projects
 VOLUME /keys
