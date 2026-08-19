@@ -36,6 +36,7 @@ RUN apt-get update && apt-get install -y \
       mosh \
       ruby \
       ruby-dev \
+      python3-pip \
       mosquitto \
       mosquitto-clients \
       postgresql-client \
@@ -43,6 +44,9 @@ RUN apt-get update && apt-get install -y \
       rsync \
       ansible && \
   rm -rf /var/lib/apt/lists/*
+
+# Install Reticulum and dacar for rngit
+RUN pip3 install --break-system-packages RNS dacar
 
 # Install Node.js from multi-stage build
 COPY --from=node /usr/local/bin/node /usr/local/bin/node
