@@ -9,7 +9,7 @@
   gather_facts: true
   vars:
     home_dir: "{{ ansible_env.HOME }}"
-    dotfiles_dir: "{{ home_dir }}/dotfiles"
+    dotfiles_dir: "{{ lookup('env', 'PWD') | default(home_dir + '/dotfiles', true) }}"
     # Platform-specific package maps
     debian_packages:
       - build-essential
@@ -354,9 +354,11 @@
     - name: Fail if dotfiles directory doesn't exist
       ansible.builtin.fail:
         msg: |
-          Dotfiles directory {{ dotfiles_dir }} does not exist.
-          Please clone the repository first:
-          git clone <repo-url> ~/dotfiles
+          Dotfiles directory not found at {{ dotfiles_dir }}.
+          Either:
+          1. Run this playbook from within the dotfiles directory
+          2. Clone to {{ home_dir }}/dotfiles: git clone <repo-url> {{ home_dir }}/dotfiles
+          3. Pass the correct path: ansible-playbook -e dotfiles_dir=/path/to/dotfiles setup.yml
       when: not dotfiles_stat.stat.exists
 
     - name: Initialize and update git submodules
