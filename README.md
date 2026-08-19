@@ -39,8 +39,6 @@ ansible-galaxy collection install -r requirements.yml
 ansible-playbook -i localhost, -c local setup.yml
 ```
 
-**Note for macOS users:** Homebrew will be installed automatically if not already present.
-
 **Note for Termux users:** Set these environment variables before running (Android W^X restrictions):
 ```bash
 export ANSIBLE_LOCAL_TEMP="$PREFIX/tmp/.ansible/tmp"

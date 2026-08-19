@@ -112,20 +112,6 @@
       become: true
       when: ansible_facts['os_family'] == 'Debian'
 
-    - name: Check if Homebrew is installed
-      ansible.builtin.stat:
-        path: /opt/homebrew/bin/brew
-      register: homebrew_stat
-      when: ansible_facts['os_family'] == 'Darwin'
-
-    - name: Install Homebrew on macOS (if missing)
-      ansible.builtin.shell:
-        cmd: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-      register: homebrew_install
-      when:
-        - ansible_facts['os_family'] == 'Darwin'
-        - not homebrew_stat.stat.exists
-
     - name: Install packages via apt (Debian/Ubuntu)
       ansible.builtin.apt:
         name: "{{ debian_packages }}"
@@ -149,6 +135,12 @@
     # ============================================================
     # Python packages
     # ============================================================
+
+    - name: Install pip dependencies (packaging library)
+      ansible.builtin.pip:
+        name: packaging
+        state: present
+      when: ansible_facts['os_family'] == 'Darwin'
 
     - name: Install Python packages via pip (Debian/Ubuntu)
       ansible.builtin.pip:
@@ -363,14 +355,6 @@
         state: directory
         mode: "0755"
 
-    - name: Remove existing directories that conflict with symlinks
-      ansible.builtin.file:
-        path: "{{ home_dir }}/{{ item.dest }}"
-        state: absent
-      when: item.remove_dir | default(false)
-      loop:
-        - { dest: .local/share/nvim, remove_dir: true }
-
     - name: Create stow-like symlinks
       ansible.builtin.file:
         src: "{{ dotfiles_dir }}/{{ item.src }}"
@@ -385,7 +369,6 @@
         - { src: git/.gitconfig, dest: .gitconfig }
         # nvim
         - { src: nvim/.config/nvim, dest: .config/nvim }
-        - { src: nvim/.local/share/nvim, dest: .local/share/nvim }
         # pi
         - { src: pi/.pi, dest: .pi }
 
