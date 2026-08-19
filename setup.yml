@@ -326,20 +326,20 @@
     # Pi coding agent
     # ============================================================
 
+    - name: Check if pi is already installed
+      ansible.builtin.command:
+        cmd: which pi
+      register: pi_check
+      changed_when: false
+      failed_when: false
+      tags: skip-ci
+
     - name: Install Pi coding agent globally
       ansible.builtin.npm:
         name: "@earendil-works/pi-coding-agent"
         global: true
         ignore_scripts: true
-      tags: skip-ci
-
-    - name: Install Pi packages
-      ansible.builtin.command:
-        cmd: "pi install {{ item }}"
-      loop: "{{ pi_packages }}"
-      register: pi_install
-      changed_when: "'already installed' not in pi_install.stdout | default('')"
-      failed_when: pi_install.rc != 0 and 'already installed' not in pi_install.stdout | default('')
+      when: pi_check.rc != 0
       tags: skip-ci
 
     # ============================================================
@@ -387,6 +387,16 @@
         - { src: nvim/.config/nvim, dest: .config/nvim }
         # pi
         - { src: pi/.pi, dest: .pi }
+
+    - name: Install Pi packages (after dotfiles are in place)
+      ansible.builtin.command:
+        cmd: "pi install {{ item }}"
+      loop: "{{ pi_packages }}"
+      register: pi_install
+      changed_when: "'already installed' not in pi_install.stdout | default('')"
+      failed_when: pi_install.rc != 0 and 'already installed' not in pi_install.stdout | default('')
+      when: pi_check.rc == 0
+      tags: skip-ci
 
   post_tasks:
     - name: Display completion message
