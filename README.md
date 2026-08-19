@@ -42,6 +42,7 @@ Then apply the configuration bundles you want:
 $ stow fish                 # fish and tmux configuration
 $ stow git                  # git configuration
 $ stow nvim                 # neovim configuration
+$ stow pi                   # pi coding agent configuration
 ```
 
 For neovim you'll also want to fetch the plugins:

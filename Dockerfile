@@ -38,6 +38,9 @@ RUN apt-get update && apt-get install -y \
 RUN curl -sL https://deb.nodesource.com/setup_24.x | bash -
 RUN apt-get install -y nodejs
 
+# Install pi coding agent
+RUN npm install -g --ignore-scripts @earendil-works/pi-coding-agent
+
 # Install Bundler
 RUN gem install bundler --no-document
 
@@ -55,6 +58,12 @@ RUN echo $TZ > /etc/timezone && \
 COPY ./fish/* /root/
 COPY ./nvim/ /root/
 COPY ./git/* /root/
+COPY ./pi/.pi/agent/AGENTS.md /root/.pi/agent/AGENTS.md
+COPY ./pi/.pi/agent/settings.json /root/.pi/agent/settings.json
+
+# Preinstall pi packages so the image works out of the box
+RUN pi install npm:pi-glm-usage && \
+    pi install npm:pi-rngit-work-document-skill
 
 # Set up volumes
 WORKDIR /projects

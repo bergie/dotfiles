@@ -8,3 +8,15 @@ ssh/.ssh/id_dsa.pub
 ssh/.ssh/known_hosts
 fish/.config/fish/fish_variables
 .DS_Store
+
+# pi agent: whitelist config, ignore runtime state (repo is public)
+pi/.pi/*
+!pi/.pi/agent
+pi/.pi/agent/*
+!pi/.pi/agent/settings.json
+!pi/.pi/agent/AGENTS.md
+!pi/.pi/agent/keybindings.json
+!pi/.pi/agent/skills/
+!pi/.pi/agent/extensions/
+!pi/.pi/agent/themes/
+!pi/.pi/agent/prompts/

@@ -3,3 +3,4 @@ git submodule update --init
 stow fish
 stow git
 stow nvim
+stow pi

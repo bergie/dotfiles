@@ -1,0 +1,27 @@
+# Keep the build context free of repo metadata and machine-local state
+.git
+.gitmodules
+.github
+Dockerfile
+README.md
+install.sh
+tmp
+backup
+.DS_Store
+
+# pi agent: whitelist config, never ship runtime state or secrets
+pi/.pi/*
+!pi/.pi/agent
+pi/.pi/agent/*
+!pi/.pi/agent/AGENTS.md
+!pi/.pi/agent/settings.json
+!pi/.pi/agent/keybindings.json
+!pi/.pi/agent/skills
+!pi/.pi/agent/extensions
+!pi/.pi/agent/themes
+!pi/.pi/agent/prompts
+
+# machine-local state
+fish/.config/fish/fish_variables
+ssh/.ssh/*
+!ssh/.ssh/authorized_keys
