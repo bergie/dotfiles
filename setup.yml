@@ -354,13 +354,8 @@
       when: not dotfiles_stat.stat.exists
 
     - name: Initialize and update git submodules
-      ansible.builtin.git:
-        repo: "{{ dotfiles_dir }}"
-        dest: "{{ dotfiles_dir }}"
-        update: yes
-        track_submodules: yes
-        recursive: yes
-      delegate_to: localhost
+      ansible.builtin.command:
+        cmd: git -C "{{ dotfiles_dir }}" submodule update --init --recursive
 
     - name: Ensure .config directory exists
       ansible.builtin.file:
