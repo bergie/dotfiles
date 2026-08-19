@@ -122,17 +122,27 @@
       become: true
       when: ansible_facts['os_family'] == 'Debian'
 
-    - name: Create tool symlinks on Debian/Ubuntu (packages have different names)
-      ansible.builtin.file:
-        src: "{{ item.src }}"
-        dest: "{{ home_dir }}/.local/bin/{{ item.name }}"
-        state: link
+    - name: Check if Debian tools exist (for symlinks)
+      ansible.builtin.stat:
+        path: "{{ item.src }}"
       loop:
         - { src: /usr/bin/fdfind, name: fd }
         - { src: /usr/bin/batcat, name: bat }
+      register: tool_stat
       when:
         - ansible_facts['os_family'] == 'Debian'
         - ansible_facts['distribution'] != 'Termux'
+
+    - name: Create tool symlinks on Debian/Ubuntu (packages have different names)
+      ansible.builtin.file:
+        src: "{{ item.item.src }}"
+        dest: "{{ home_dir }}/.local/bin/{{ item.item.name }}"
+        state: link
+      loop: "{{ tool_stat.results }}"
+      when:
+        - ansible_facts['os_family'] == 'Debian'
+        - ansible_facts['distribution'] != 'Termux'
+        - item.stat.exists
 
     - name: Install packages via homebrew (macOS)
       community.general.homebrew:
