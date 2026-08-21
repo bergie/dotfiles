@@ -1,6 +1,6 @@
 {
   "lastChangelogVersion": "0.84.2",
-  "theme": "dark",
+  "theme": "tokyo-night-storm",
   "defaultProvider": "zai",
   "defaultModel": "glm-5.1",
   "defaultThinkingLevel": "medium",
