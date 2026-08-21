@@ -2,6 +2,15 @@
 
 Defaults for all repositories. Project-level `AGENTS.md` files add to or override these rules.
 
+## Context Documents
+
+Reference documents useful across multiple projects are stored in `~/.pi/agent/context/`. These are **not** automatically loaded.
+
+To use a context document, explicitly request it by path:
+- `read ~/.pi/agent/context/filename.md`\- `Refer to ~/.pi/agent/context/component-basics.md for NoFlo patterns`
+
+Skills for on-demand capabilities are in `~/.pi/agent/skills/`. Skills are auto-discovered by pi and can be invoked via `/skill:name` or loaded automatically based on their descriptions.
+
 ## Work documents
 
 Projects with an `rns://` git remote (rngit repositories, typically as remote `origin`) plan technical work using work documents. The remote URL is the work document repository — the rngit skill auto-discovers it, no need to hardcode.
