@@ -40,3 +40,4 @@ Defaults for all code repositories:
 - ⚠️ **Ask first**: modifying CI configuration
 - ⚠️ **Ask first**: adding an optional input to a method
 - 🚫 **Never**: commit on your own. When work is ready, summarize the changes and explicitly say "uncommitted changes ready for review" so it's not missed
+- 🚫 **Never**: create or edit project text documents meant for human consumption (for example `README.md`) on your own initiative. Only when requested by user to do so
