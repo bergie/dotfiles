@@ -1,9 +1,9 @@
 {
-  "lastChangelogVersion": "0.84.2",
+  "lastChangelogVersion": "0.84.3",
   "theme": "tokyo-night-storm",
   "defaultProvider": "zai",
-  "defaultModel": "glm-5.1",
-  "defaultThinkingLevel": "medium",
+  "defaultModel": "glm-5.2",
+  "defaultThinkingLevel": "high",
   "packages": [
     "npm:pi-glm-usage",
     "npm:pi-rngit-work-document-skill",
