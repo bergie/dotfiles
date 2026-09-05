@@ -84,6 +84,7 @@ The interface must seamlessly scale between two distinct modes of operation:
 Strip all default browser styling (`appearance: none;`). Forms must feel like hardware inputs.
 
 * **Text/Number Inputs:** Transparent backgrounds with a solid 2px `--color-grey` bottom border. On `:focus`, the bottom border transitions to the active `--theme-color`. Input text must be monospace.
+* **Number Inputs (GOV.UK guidance):** Prefer `type="text"` paired with an `inputmode` attribute (`numeric` for integers, `decimal` for unsigned decimals) over `type="number"` — it selects the right mobile keypad while avoiding `type="number"`'s quirks (scroll-wheel value changes, locale-dependent parsing, ambiguous `e`/`+` entry). Always validate and parse in JavaScript, never trust the input type. **Caveat for signed values:** the compact `numeric`/`decimal` keypads on iOS have NO minus key, so for negative-capable fields (e.g. latitude/longitude with S/W hemispheres) either use `type="number"` WITHOUT an `inputmode` override (iOS then shows its numbers-and-punctuation keyboard, Android its numeric pad — both include `-`) or add a hemisphere toggle (`N/S`, `E/W`) beside an unsigned field.
 * **Buttons:** Transparent background, 1px solid `--theme-color` border, uppercase monospace text. On `:hover` or `:active`, invert the colors (background becomes `--theme-color`, text becomes `--bg-base`).
 * **Toggles/Switches:** Use sharp, rectangular sliding switches or bracketed toggle buttons `[ ON ] / [ OFF ]`.
 
