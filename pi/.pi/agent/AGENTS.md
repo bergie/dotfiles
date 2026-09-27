@@ -40,4 +40,5 @@ Defaults for all code repositories:
 - ⚠️ **Ask first**: modifying CI configuration
 - ⚠️ **Ask first**: adding an optional input to a method
 - 🚫 **Never**: commit on your own. When work is ready, summarize the changes and explicitly say "uncommitted changes ready for review" so it's not missed
+- 🚫 **Never**: hard-wrap prose in Markdown or other plain-text documents (e.g. at 80 characters). Write each paragraph as a single continuous line and let editors/viewers soft-wrap. Keep one item per line only for lists, tables, and headings.
 - 🚫 **Never**: create or edit project text documents meant for human consumption (for example `README.md`) on your own initiative. Only when requested by user to do so. If document gets outdated by a change you're working on, let the user know
