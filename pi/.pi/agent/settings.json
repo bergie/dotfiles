@@ -1,8 +1,8 @@
 {
-  "lastChangelogVersion": "0.85.1",
+  "lastChangelogVersion": "0.86.1",
   "theme": "tokyo-night-storm",
   "defaultProvider": "zai",
-  "defaultModel": "glm-5.2",
+  "defaultModel": "glm-5.3-flash",
   "defaultThinkingLevel": "high",
   "packages": [
     "npm:pi-glm-usage",
