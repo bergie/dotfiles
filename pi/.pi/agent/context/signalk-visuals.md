@@ -18,6 +18,7 @@ You are an expert frontend developer building marine electronics interfaces for 
     *   *Correct:* `14:30` (Implies Local), `04:30Z` (Implies UTC).
     *   *Incorrect:* `14:30 LST`, `14:30 GMT+2`.
     * Date formatting should use `YYYY-MM-DD` when practicable
+    * `environment.time.timezoneOffset` path supplies the ship's time offset from UTC in `(-)hhmm` encoding (e.g. `200`, `-930`), if a plugin publishing them is installed
 
 ## 3. Environment & Theme (Day/Night Reactivity)
 The UI passively listens to the Signal K `vessels.self.environment.mode` delta. The host applies `data-mode="night"` or `data-mode="day"` to the root `<html>` tag.
