@@ -1,13 +1,12 @@
 {
   "lastChangelogVersion": "0.86.1",
-  "theme": "tokyo-night-storm",
+  "theme": "light/dark",
   "defaultProvider": "zai",
   "defaultModel": "glm-5.3-flash",
   "defaultThinkingLevel": "high",
   "packages": [
     "npm:pi-glm-usage",
     "npm:pi-rngit-work-document-skill",
-    "npm:pi-tokyo-night-storm",
     "npm:@czottmann/pi-cortecs"
   ],
   "enableInstallTelemetry": false
