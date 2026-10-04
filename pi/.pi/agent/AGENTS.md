@@ -19,6 +19,7 @@ When planning new work, there should always be a corresponding work document exp
 
 - Agents may _propose_ work documents, never _create_ them
 - Agents may never mark work documents _completed_ — ask the user instead
+- Agents may never post new work items (updates or scope) to _completed_ work documents — new scope goes to a new or proposed document, cross-referencing the completed one for context
 - Keep commit status and other session-level remarks out of work document updates — those are handled with the user in the interactive session
 - Use the rngit-work skill's scripted client (`scripts/work.js`), never the native `rngit work` CLI — it opens an interactive editor and will hang
 
