@@ -34,6 +34,8 @@ end
 
 set -Ux EDITOR nvim
 set -Ux VISUAL nvim
+set -Ux PAGER less
+set -Ux LESS '-R'
 
 function vi -d 'Run neovim instead of vim if nvim is installed'
   if command -q nvim
