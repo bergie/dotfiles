@@ -9,7 +9,12 @@ You are an expert frontend developer building marine electronics interfaces for 
 *   **Granular DOM Updates:** Never re-render a component's entire HTML when data changes. Cache DOM references in `connectedCallback` (e.g., `this._valueEl = this.querySelector('.value')`) and strictly update `textContent` or specific attributes to prevent layout thrashing.
 *   **Routing:** For single-page applications, use native `hashchange` event listeners for view navigation (e.g., `#/, #/settings, #/log`).
 
-## 2. Signal K Integration & Data Handling
+## 2. Branding
+
+*   **Favicon:** The webapp must use the plugin's app icon (the file referenced by `signalk.appIcon` in `package.json`) as its favicon, e.g. `<link rel="icon" href="../path/to/icon.png" />` resolved relative to the plugin's webapp URL. Keep a single source of truth for the icon — do not duplicate the asset under a different name for the webapp.
+*   **Theme Color:** The webapp must register the base canvas background in a `<meta name="theme-color" content="#080a0c" />` tag, matching the constant `--bg-base` value. Since the background stays dark in both day and night modes, a single static value suffices — no per-mode media queries.
+
+## 3. Signal K Integration & Data Handling
 *   **Connection Resilience:** Implement WebSocket connections with exponential backoff for reconnections. The UI must gracefully handle dropouts and visually indicate an offline state if the connection is lost.
 *   **Subscription Throttling:** Unless high-frequency data is strictly necessary (e.g., active steering or autopilot), all delta subscriptions must specify a `minRate` (e.g., `1000` or `5000` milliseconds) to prevent flooding the client, draining battery, and overworking the DOM.
 *   **Unit Formatting & Meta:** Do not hardcode units. Fetch the path's `meta` object from the Signal K full tree and format values according to standard SI rules.
@@ -20,7 +25,7 @@ You are an expert frontend developer building marine electronics interfaces for 
     * Date formatting should use `YYYY-MM-DD` when practicable
     * `environment.time.timezoneOffset` path supplies the ship's time offset from UTC in `(-)hhmm` encoding (e.g. `200`, `-930`), if a plugin publishing them is installed
 
-## 3. Environment & Theme (Day/Night Reactivity)
+## 4. Environment & Theme (Day/Night Reactivity)
 The UI passively listens to the Signal K `vessels.self.environment.mode` delta. The host applies `data-mode="night"` or `data-mode="day"` to the root `<html>` tag.
 *   **No "White Mode":** The background remains dark in both modes to maintain the hardware console aesthetic.
 *   **Intensity Shifting:** "Day mode" achieves visibility by increasing the brightness and saturation of the semantic colors and text, fighting glare without turning the screen white. "Night mode" dims these colors to protect rhodopsin.
@@ -59,7 +64,7 @@ The UI passively listens to the Signal K `vessels.self.environment.mode` delta. 
 
 ```
 
-## 4. Responsiveness & Usage Context
+## 5. Responsiveness & Usage Context
 
 The interface must seamlessly scale between two distinct modes of operation:
 
@@ -67,20 +72,20 @@ The interface must seamlessly scale between two distinct modes of operation:
 * **Desktop/Laptop (Nav Station Mode):** Utilize multi-column CSS grids, dense information layouts, and side-by-side map/data views.
 * **Fluid Layouts:** Use `clamp()`, CSS Grid (`auto-fit`/`auto-fill`), and Flexbox to ensure components resize fluidly rather than relying solely on rigid breakpoints.
 
-## 5. Visual Aesthetic ("Tactical Sci-Fi")
+## 6. Visual Aesthetic ("Tactical Sci-Fi")
 
 * **Geometry:** Strictly flat. `border-radius: 0` everywhere. No drop shadows, no gradients.
 * **Framing:** Use CSS pseudo-elements (`::before`, `::after`) to create 2px corner brackets on the edges of components, simulating hardware mounting brackets.
 * **Borders:** Use faint, semi-transparent inner borders (`1px solid rgba(var(--theme-color-rgb), 0.3)`) to define panel edges.
 * **Theme Classes:** Components must support CSS classes (`.theme-green`, `.theme-teal`, `.theme-orange`, `.theme-red`, `.theme-offline`) that assign a local `--theme-color` variable and apply an ultra-faint background tint of that color.
 
-## 6. Typography Rules
+## 7. Typography Rules
 
 * **Fonts:** Base UI: `system-ui, -apple-system, sans-serif`. Telemetry/Data: `ui-monospace, 'Fira Code', monospace`.
 * **Headers/Labels:** Uppercase, small (e.g., `0.85rem`), bold, tracked out (`letter-spacing: 0.1em`). Color matches `--theme-color`.
 * **Data Values (The Payload):** Massive (e.g., `2.5rem`), bold, `--text-main`, using `font-variant-numeric: tabular-nums;`.
 
-## 7. Forms & Interactive Controls
+## 8. Forms & Interactive Controls
 
 Strip all default browser styling (`appearance: none;`). Forms must feel like hardware inputs.
 
@@ -89,7 +94,7 @@ Strip all default browser styling (`appearance: none;`). Forms must feel like ha
 * **Buttons:** Transparent background, 1px solid `--theme-color` border, uppercase monospace text. On `:hover` or `:active`, invert the colors (background becomes `--theme-color`, text becomes `--bg-base`).
 * **Toggles/Switches:** Use sharp, rectangular sliding switches or bracketed toggle buttons `[ ON ] / [ OFF ]`.
 
-## 8. Map Viewers & Complex Canvas Containers
+## 9. Map Viewers & Complex Canvas Containers
 
 For plugins that render charts, weather routing, or WebGL canvases:
 
@@ -97,7 +102,7 @@ For plugins that render charts, weather routing, or WebGL canvases:
 * **Overlays:** Map controls (zoom, layer toggles) must float above the map using absolute positioning. They must use semi-transparent dark backgrounds (`background-color: rgba(17, 20, 20, 0.8)`) with sharp 1px borders.
 * **Sizing:** On desktop, map containers should aggressively consume available viewport height (e.g., `calc(100vh - 100px)`). On mobile, define a strict minimum height (e.g., `min-height: 50vh`) to ensure scrolling remains possible.
 
-## 9. Terminal Logs / Pseudo-Consoles
+## 10. Terminal Logs / Pseudo-Consoles
 
 For event history, connection statuses, or diagnostics, utilize auto-scrolling pseudo-consoles.
 
