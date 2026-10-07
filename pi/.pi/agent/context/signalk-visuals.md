@@ -11,7 +11,7 @@ You are an expert frontend developer building marine electronics interfaces for 
 
 ## 2. Branding
 
-*   **Favicon:** The webapp must use the plugin's app icon (the file referenced by `signalk.appIcon` in `package.json`) as its favicon, e.g. `<link rel="icon" href="../path/to/icon.png" />` resolved relative to the plugin's webapp URL. Keep a single source of truth for the icon — do not duplicate the asset under a different name for the webapp.
+*   **Favicon:** The webapp must use the plugin's app icon (the file referenced by `signalk.appIcon` in `package.json`) as its favicon, e.g. `<link rel="icon" href="../path/to/icon.png" />` resolved relative to the plugin's webapp URL. Keep a single source of truth for the icon — do not duplicate the asset under a different name for the webapp (other size variants of icon may be kept for other reasons).
 *   **Theme Color:** The webapp must register the base canvas background in a `<meta name="theme-color" content="#080a0c" />` tag, matching the constant `--bg-base` value. Since the background stays dark in both day and night modes, a single static value suffices — no per-mode media queries.
 
 ## 3. Signal K Integration & Data Handling
