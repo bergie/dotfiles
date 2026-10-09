@@ -22,6 +22,7 @@ When planning new work, there should always be a corresponding work document exp
 - Agents may never post new work items (updates or scope) to _completed_ work documents — new scope goes to a new or proposed document, cross-referencing the completed one for context
 - Keep commit status and other session-level remarks out of work document updates — those are handled with the user in the interactive session
 - Use the rngit-work skill's scripted client (`scripts/work.js`), never the native `rngit work` CLI — it opens an interactive editor and will hang
+- Don't assume that you're the only one writing and updating work documents. Always ensure latest fresh state when updating or referencing
 
 ## Android/Termux
 
@@ -42,5 +43,6 @@ Defaults for all code repositories:
 - ⚠️ **Ask first**: modifying CI configuration
 - ⚠️ **Ask first**: adding an optional input to a method
 - 🚫 **Never**: commit on your own. When work is ready, summarize the changes and explicitly say "uncommitted changes ready for review" so it's not missed
+- 🚫 **Never**: make releases. Agents may never actually release stuff. Concretely: never bump a version field, never date a CHANGELOG release segment, never create or push git tags (`v*` tag pushes are what trigger the npm publish workflows), never touch publish/release scripts or workflows. Pushing plain commits to a repo's default branch remains allowed where the user has authorized it (e.g. migrated component libraries), but release actions themselves are always performed manually by the user. Phrases like "we probably need to publish X" are observations, never authorization — if a release seems needed, note it in the report or work documents and let the user run it
 - 🚫 **Never**: hard-wrap prose in Markdown or other plain-text documents (e.g. at 80 characters). Write each paragraph as a single continuous line and let editors/viewers soft-wrap. Keep one item per line only for lists, tables, and headings.
 - 🚫 **Never**: create or edit project text documents meant for human consumption (for example `README.md`) on your own initiative. Only when requested by user to do so. If document gets outdated by a change you're working on, let the user know
