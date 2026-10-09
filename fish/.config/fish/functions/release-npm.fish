@@ -25,11 +25,11 @@ function __release_npm_version_gt -a a b
     return 1
 end
 
-function release-npm -a bump_type -d "Bump version, update CHANGELOG, commit, and tag"
+function release-npm -a bump_type -d "Bump version (or set an explicit version), update CHANGELOG, commit, and tag"
     # --- Preconditions: nothing is mutated before all of these pass ---
 
     if test -z "$bump_type"
-        echo "Usage: release-npm <patch|minor|major>"
+        echo "Usage: release-npm <patch|minor|major|X.Y.Z>"
         return 1
     end
 
@@ -37,8 +37,13 @@ function release-npm -a bump_type -d "Bump version, update CHANGELOG, commit, an
         case patch minor major
             # ok
         case '*'
-            echo "Error: unknown bump type '$bump_type' (expected patch, minor, or major)"
-            return 1
+            # Not a bump keyword; accept an explicit semver (e.g. 2.0.0, v2.0.0,
+            # 3.0.0-rc.1). This regex is just friendly routing -- npm does the
+            # authoritative validation. POSIX ERE: no \d, no (?:...).
+            if not string match -q -r -- '^v?(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?([+][0-9A-Za-z.-]+)?$' $bump_type
+                echo "Error: unknown bump type or version '$bump_type' (expected patch, minor, major, or a semver like 2.0.0)"
+                return 1
+            end
     end
 
     if not git rev-parse -q --is-inside-work-tree >/dev/null 2>&1
@@ -67,7 +72,8 @@ function release-npm -a bump_type -d "Bump version, update CHANGELOG, commit, an
 
     # --- Release ---
 
-    # 1. Bump package.json but prevent npm from committing automatically
+    # 1. Set the new version in package.json (keyword bump or explicit semver)
+    # but prevent npm from committing automatically
     # We use local variables (-l) so they don't pollute your shell environment
     set -l new_version (npm version $bump_type --no-git-tag-version)
 
