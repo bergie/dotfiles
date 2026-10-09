@@ -7,7 +7,9 @@ Defaults for all repositories. Project-level `AGENTS.md` files add to or overrid
 Reference documents useful across multiple projects are stored in `~/.pi/agent/context/`. These are **not** automatically loaded.
 
 To use a context document, explicitly request it by path:
-- `read ~/.pi/agent/context/filename.md`\- `Refer to ~/.pi/agent/context/component-basics.md for NoFlo patterns`
+- `read ~/.pi/agent/context/filename.md`
+- `Refer to ~/.pi/agent/context/component-basics.md for NoFlo patterns`
+- `Refer to ~/.pi/agent/context/package-installation.md when writing or editing package install instructions`
 
 Skills for on-demand capabilities are in `~/.pi/agent/skills/`. Skills are auto-discovered by pi and can be invoked via `/skill:name` or loaded automatically based on their descriptions.
 
