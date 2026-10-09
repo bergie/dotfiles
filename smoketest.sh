@@ -62,6 +62,14 @@ else
 fi
 
 echo ""
+echo "=== rngit work documents ==="
+if command -v rngit-work-tui >/dev/null 2>&1; then
+  echo "rngit-work-tui found at $(command -v rngit-work-tui)"
+else
+  echo "rngit-work-tui not installed (skipped in CI)"
+fi
+
+echo ""
 echo "=== Dotfiles Symlinks ==="
 test -L $HOME/.config/fish && echo ".config/fish ✓"
 test -L $HOME/.tmux.conf && echo ".tmux.conf ✓"

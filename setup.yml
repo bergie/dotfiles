@@ -349,7 +349,30 @@
         name: "@earendil-works/pi-coding-agent"
         global: true
         ignore_scripts: true
+      register: pi_npm_install
       when: pi_check.rc != 0
+      tags: skip-ci
+
+    - name: Check if rngit-work-doc-editor is already installed
+      ansible.builtin.command:
+        cmd: which rngit-work-tui
+      register: workdoc_check
+      changed_when: false
+      failed_when: false
+
+    - name: Install rngit-work-doc-editor globally
+      ansible.builtin.npm:
+        name: "rngit-work-doc-editor"
+        global: true
+      when: workdoc_check.rc != 0
+
+    - name: Verify pi coding agent installation
+      ansible.builtin.command:
+        cmd: pi --version
+      register: pi_version
+      changed_when: false
+      when:
+        - (pi_check.rc | default(1)) == 0 or (pi_npm_install is defined and pi_npm_install is not skipped)
       tags: skip-ci
 
     # ============================================================

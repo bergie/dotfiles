@@ -89,8 +89,9 @@ COPY --from=starship /usr/local/bin/starship /usr/local/bin/starship
 # Install sops from multi-stage build
 COPY --from=sops /usr/local/bin/sops /usr/local/bin/sops
 
-# Install pi coding agent
-RUN npm install -g --ignore-scripts @earendil-works/pi-coding-agent
+# Install pi coding agent and rngit work document editor
+RUN npm install -g --ignore-scripts @earendil-works/pi-coding-agent && \
+    npm install -g rngit-work-doc-editor
 
 # Create non-root user (rename ubuntu user to bergie to avoid UID 1000 collision)
 RUN usermod -l bergie -d /home/bergie -m -s /usr/bin/fish ubuntu && \
@@ -110,6 +111,9 @@ COPY ./pi/.pi/agent/settings.json /root/.pi/agent/settings.json
 # Preinstall pi packages so the image works out of the box
 RUN pi install npm:pi-glm-usage && \
     pi install npm:pi-rngit-work-document-skill
+
+# Verify pi coding agent and rngit work document editor are correctly installed
+RUN pi --version && command -v rngit-work-tui
 
 # Switch to non-root user
 USER bergie
