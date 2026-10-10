@@ -76,6 +76,7 @@ test -L $HOME/.tmux.conf && echo ".tmux.conf ✓"
 test -L $HOME/.gitconfig && echo ".gitconfig ✓"
 test -L $HOME/.config/nvim && echo ".config/nvim ✓"
 test -L $HOME/.pi && echo ".pi ✓"
+test -f $HOME/.pi/agent/extensions/title-state.ts && echo "pi title-state extension ✓"
 
 echo ""
 echo "=== Git Submodule ==="
