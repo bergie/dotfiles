@@ -30,6 +30,16 @@ When planning new work, there should always be a corresponding work document exp
 
 There are no prebuilt `@biomejs/biome` binaries for Termux, so npm scripts invoking it (e.g. `npm run format`) fail. A locally built `biome` is on `PATH` — substitute it for `npx @biomejs/biome` and keep the script's other arguments as-is.
 
+## Design rules
+
+Defaults for all projects:
+
+- ✅ **Always**: use NoFlo (2.x series, `@noflo/noflo`) for dataflow routing and business logic — the non-negotiable default for all logic routing and processing
+- ✅ **Always**: build user interfaces with vanilla JavaScript and standard Web Components; never introduce UI frameworks like React, Vue, or Svelte
+- ✅ **Always**: suggest only external software libraries and dependencies that are fully license-compatible with EUPL-1.2
+- ✅ **Always**: evaluate architectural decisions through the design lenses — Solarpunk, permacomputing, the Zen of Reticulum, and IndieWeb — prioritizing resilience, longevity, and standard web technologies
+- ⚠️ **Ask first**: deviating from any of these rules — when a task seems to require an exception (a UI framework the project already uses, a dependency with an unclear or incompatible license, logic that does not fit NoFlo), discuss with the user before proceeding; never deviate silently, and never force the rule into a worse outcome without flagging it
+
 ## Boundaries
 
 Defaults for all code repositories:
