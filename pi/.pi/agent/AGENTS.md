@@ -45,6 +45,7 @@ Defaults for all projects:
 Defaults for all code repositories:
 
 - ✅ **Always**: notify the user before starting any operation or command expected to take longer than a minute
+- ✅ **Always**: run test suites and other potentially hanging commands with a timeout
 - ✅ **Always**: write at least smoketests for any new functionality
 - ✅ **Always**: ensure type safety, and verify with the project's type checks
 - ✅ **Always**: run the project's formatter after changes to source or tests
