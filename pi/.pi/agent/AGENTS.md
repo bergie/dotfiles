@@ -52,6 +52,7 @@ Defaults for all code repositories:
 - ✅ **Always**: use `git mv` instead of `mv` for renaming files
 - ✅ **Always**: keep APIs unambiguous — remove legacy paths instead of adding compatibility layers
 - ✅ **Always**: document major changes in the `CHANGELOG.md` (Unreleased segment) where the project maintains one. If you fix or modify something inside the same `Unreleaased` segment where it was added, the fix/change doesn't need a separate entry
+- ✅ **Always**: if an edit or read done via tools like `sed` or `python`, immediately switch to using `read` and `edit` tools
 - ⚠️ **Ask first**: adding dependencies
 - ⚠️ **Ask first**: modifying CI configuration
 - ⚠️ **Ask first**: adding an optional input to a method

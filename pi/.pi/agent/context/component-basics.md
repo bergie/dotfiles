@@ -41,6 +41,8 @@ When a component is instantiated, it is inert and doesn't do anything. Component
 
 The process contract is: check preconditions with `has`/`hasData`, then activate and start processing with `get`/`getData`. Reading from a port while an activation is still waiting for more data is a footgun — that pending activation will never re-invoke (load never drains, `shutdown()` hangs). So check everything with `has` first; only once the firing pattern is confirmed, get the values and process to completion. Note that on control ports `has()` reports whether a data IP is present in the buffered stream; buffered brackets alone don't satisfy it.
 
+The has-first rule covers every port the activation will consume, not just the firing ports. A collector that waits for complete streams on several ports must has-check every one of them — including per-connection `hasStream(["data", idx])` completeness — before consuming the message: an activation that consumes one port and early-returns without `done()` to wait for the rest stays open (a synchronous handler that activated and returned is not auto-deactivated), the late-arriving data cannot re-fire while `load` is above zero, and the network hangs at shutdown with the message lost to the waiting activation.
+
 The `process` function receives an `input` and an `output` object representing the execution context:
 
 - The `input` object is used to check for and retrieve incoming packets.

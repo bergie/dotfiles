@@ -1,8 +1,29 @@
-# Returns 0 if version $a is strictly greater than version $b.
-# Dotted numeric comparison; prerelease suffixes (e.g. -rc.1) are ignored.
+# Returns 0 if version $a is strictly greater than version $b, following semver
+# precedence: core numbers first, then a release beats prereleases of the same
+# core (2.0.0 > 2.0.0-rc.1), then prerelease identifiers are compared one by one
+# (numeric numerically, alphanumeric lexicographically, numeric < alphanumeric;
+# e.g. 2.0.0-alpha.3 > 2.0.0-alpha.2 > 2.0.0-alpha.1 > 2.0.0-alpha). Build
+# metadata (+...) is ignored.
 function __release_npm_version_gt -a a b
-    set -l ap (string split . (string replace -r -- '-.*$' '' $a))
-    set -l bp (string split . (string replace -r -- '-.*$' '' $b))
+    # Strip build metadata
+    set -l a (string replace -r -- '\+.*$' '' $a)
+    set -l b (string replace -r -- '\+.*$' '' $b)
+
+    # Split "X.Y.Z-prerelease" into core and prerelease
+    set -l a_parts (string split -m 1 -- - $a)
+    set -l b_parts (string split -m 1 -- - $b)
+    set -l a_pre ''
+    set -l b_pre ''
+    if test (count $a_parts) -ge 2
+        set a_pre $a_parts[2]
+    end
+    if test (count $b_parts) -ge 2
+        set b_pre $b_parts[2]
+    end
+
+    # Compare major.minor.patch numerically
+    set -l ap (string split . $a_parts[1])
+    set -l bp (string split . $b_parts[1])
     set -l n (count $ap)
     if test (count $bp) -gt $n
         set n (count $bp)
@@ -20,6 +41,67 @@ function __release_npm_version_gt -a a b
             return 0
         else if test $x -lt $y
             return 1
+        end
+    end
+
+    # Cores are equal: a release beats any prerelease of the same core
+    if test -z "$a_pre"; and test -z "$b_pre"
+        return 1
+    end
+    if test -z "$a_pre"
+        return 0
+    end
+    if test -z "$b_pre"
+        return 1
+    end
+
+    # Both are prereleases: compare dot-separated identifiers
+    set -l a_ids (string split . $a_pre)
+    set -l b_ids (string split . $b_pre)
+    set -l n (count $a_ids)
+    if test (count $b_ids) -gt $n
+        set n (count $b_ids)
+    end
+    for i in (seq $n)
+        set -l x ''
+        set -l y ''
+        if test $i -le (count $a_ids)
+            set x $a_ids[$i]
+        end
+        if test $i -le (count $b_ids)
+            set y $b_ids[$i]
+        end
+        # Fewer identifiers lose once all shared ones are equal
+        if test -z "$x"
+            return 1
+        end
+        if test -z "$y"
+            return 0
+        end
+        set -l x_num 0
+        set -l y_num 0
+        string match -qr '^[0-9]+$' -- $x; and set x_num 1
+        string match -qr '^[0-9]+$' -- $y; and set y_num 1
+        if test $x_num -eq 1; and test $y_num -eq 1
+            if test $x -gt $y
+                return 0
+            else if test $x -lt $y
+                return 1
+            end
+        else if test $x_num -ne $y_num
+            # Numeric identifiers have lower precedence than alphanumeric
+            if test $y_num -eq 1
+                return 0
+            end
+            return 1
+        else
+            # Both alphanumeric: lexicographic byte order
+            set -l first (printf '%s\n%s\n' $x $y | LC_ALL=C sort | head -n 1)
+            if test "$first" != "$x"
+                return 0
+            else if test "$x" != "$y"
+                return 1
+            end
         end
     end
     return 1
