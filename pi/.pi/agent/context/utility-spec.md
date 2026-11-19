@@ -2,7 +2,7 @@
 
 Context document for LLMs writing personal utility PWAs. This file is the complete spec; load it before writing any code for a utility, so the conversation with the person is about the *problem* the utility solves, not about how to build it.
 
-A utility is one app in one repository: a static PWA whose UI is Web Components and whose business logic is NoFlo 2.x graphs, deployed in one of three tiers depending on what it must reach. Not yet specified: a design system (tokens, typography, controls, motion, accessibility) and module conventions (Signal K, maps and charts, realtime data, console). See §14 Implementation status for what this means in practice.
+A utility is one app in one repository: a static PWA whose UI is Web Components and whose business logic is NoFlo 2.x graphs, deployed in one of three tiers depending on what it must reach. Not yet specified: a design system (tokens, typography, controls, motion, accessibility) and module conventions (Signal K, maps and charts, realtime data, console).
 
 Related context documents, to load alongside this one when relevant: `~/.pi/agent/context/component-basics.md` (NoFlo 2.x patterns), `~/.pi/agent/context/signalk-visuals.md` (Signal K UI rules), `~/.pi/agent/context/package-installation.md` (first-party package distribution).
 
@@ -101,7 +101,7 @@ Allowed, because nothing they produce ships:
 - Shared types are `@typedef`s in `src/types.js`. Import types with `/** @typedef {import('./types.js').Reading} Reading */`.
 - Every exported function has `@param` and `@returns`. Every component port payload has a matching `@typedef`.
 - `any` is allowed only at the boundary with a vendored library lacking types; wrap it immediately in a typed function. Prefer `unknown` plus validation.
-- JSON Schemas in `schemas/` are the source of truth for port payloads (D12). Keep each schema and its typedef side by side in review. A test MUST validate sample payloads against each schema.
+- JSON Schemas in `schemas/` are the source of truth for port payloads (D12). A port declares its schema as the id `<utility-id>/<schema-name>` (NoFlo 2.x `ns/name` form) and the schema body lives in `schemas/<schema-name>.json`; no cross-file `$ref` in v1, so a schema's closure is the single file. Keep each schema and its typedef side by side in review. A test MUST validate sample payloads against each schema.
 - Validation of inbound data: use the schema/guard facilities of the NoFlo runtime where available; otherwise a small hand-written validator for the subset actually used (type, enum, min/max, required). Do not add a general-purpose validator dependency without a justification line in `vendor/vendor.json`.
 
 ### 6.5 Repository layout
@@ -162,7 +162,7 @@ Vendoring is the only build step, run only when adding or updating a dependency.
 First-party packages — `@reticulum/*` (reticulum-js), `dacar`, NoFlo, `rfed`, and the meri-imperiumi `signalk-*` plugins — are canonically distributed as cryptographically signed rngit releases over the Reticulum mesh, with centralized registries (npm) as mirrors; refer to `~/.pi/agent/context/package-installation.md` when documenting install steps or vendoring sources for them.
 
 - `scripts/vendor.mjs` uses only Node built-ins. It fetches a pinned package (for example via `npm pack` into a temp directory), copies the needed files into `vendor/<name>/`, and updates `vendor/vendor.json`.
-- Every vendored package has a manifest entry: `name`, exact `version`, `license` (SPDX id), `source` URL, `sha256` of the vendored files, and a one-line `justification` explaining why a dependency is needed at all.
+- Every vendored package has a manifest entry: `name`, exact `version`, `license` (SPDX id), `source` URL, `sha256` of the vendored files, and a one-line `justification` explaining why a dependency is needed at all. First-party packages (`@reticulum/*`, `dacar`, NoFlo) additionally record the rngit `release` (`rns://<origin>/<group>/<repo>` and tag) and the release `signer` identity hash; the vendoring script fetches and verifies the signed release (`rngit release fetch ... <signer>`, re-checkable offline with `rngit release verify`) before copying files. Where a signature could not be machine-verified, the entry instead records in a `verified` line what was checked by hand and by whom.
 - Versions are pinned exactly. No ranges, no `latest`.
 - Vendored files are committed and **never edited in place**. Local fixes live as patch files in `vendor/patches/` and are applied by the vendoring script.
 - Licences MUST be EUPL-1.2-compatible. If unsure, do not add the dependency; say so.
@@ -233,7 +233,7 @@ Components:
 - **Fixed registry** (D11): `src/components/index.js` imports every component explicitly. No dynamic discovery, installation or loading.
 - **One responsibility per component.** Port names are plain nouns or verbs.
 - **No mode flags** (D8). If a flag changes which things happen, split the component. Port configuration carries *values* (a path, an interval, a threshold), never behaviour switches.
-- **Every port has a JSON Schema** in `schemas/` (D12). Port payloads MUST be wire-safe: JSON/MsgPack-serializable, no functions, DOM nodes or class instances. This keeps tiers interchangeable.
+- **Every port has a JSON Schema** in `schemas/` (D12). Port payloads MUST be wire-safe: MsgPack is the wire encoding (§14), so payloads are limited to what both JSON and MsgPack represent, plus byte strings (`Uint8Array`) — no functions, DOM nodes, `undefined`, `Date`, `Map`, `BigInt`, `NaN` or `Infinity`. This keeps tiers interchangeable.
 - Logic components are **pure** where possible: no DOM, no storage, no files, no network, no direct adapter imports. They get effects only through wired adapter ports.
 - Each component file begins with a header comment listing its ports and what they mean.
 
@@ -248,7 +248,7 @@ Graphs:
 - Graph structure is the unit of adaptation (D8): to change *what the utility does*, change the graph; to change *a value*, change a setting.
 - Initial packets carry fixed values. User-editable values come from the `storage` adapter as packets. Secrets never appear in graph JSON.
 - Keep graphs small: a soft cap of about 15 nodes per graph. Beyond that, extract a subgraph with documented ports.
-- Lifecycle: a graph starts from a `start` packet and stops on a `shutdown` packet. Adapters release resources when their stream ends.
+- Lifecycle: NoFlo 2.x has no start or shutdown packets. A network starts when the host application starts it; fixed values enter as initial information packets (IIPs), and control ports redeliver standing configuration at each network start. A long-running utility network stays running because its boundary sources — the adapters — hold their transmissions open. To stop it, the host ends those transmissions (end-of-transmission) and calls `network.stop()` (wired to SIGINT/SIGTERM in tier 2). Closedown is cascading: a network ends when every boundary input is at end-of-transmission and the network is quiescent. Components release resources in `tearDown` handlers, called at shutdown; a shutdown that hangs is a component bug (see the has-first activation rules in `component-basics.md`).
 
 ### 7.4 Client graph and host graph
 
@@ -285,6 +285,8 @@ Rules:
 ### 7.6 `host-link`: the client/host boundary (tiers 1 and 2)
 
 The host graph's **exported ports** are its component signature: in and out ports with JSON Schema references. The client graph contains a `host` node whose ports mirror them; the client graph neither knows nor cares whether it is in-process or remote.
+
+The `host` node is a hand-written component in `src/components/host.js`, declared in the fixed registry, with its ports taken from the host graph's exported-port schemas (§6.4). A test compares the component's signature hash against the host graph's — the protocol computes `sig_hash` for component signatures — so signature drift fails the test instead of surfacing at runtime.
 
 - **State vs event ports (A12).** A *state* port is retained: the host replays the latest value to a client on subscribe and on reconnect. An *event* port is not replayed. The marker is an additive optional port field, `retain` (see P3 in §13).
 - **Requests.** A request packet carries an `id`; the answer arrives on a `response` outport echoing it. Clients filter by `id`. Over a mesh, answers may take minutes: the UI shows a pending state and never blocks.
@@ -558,7 +560,7 @@ Tier 1: there is no host to claim. A tier 1 client is a client of someone else's
 
 ### 10.6 Host discovery (A13)
 
-- Hosts announce under the stable `fbp.runtime` aspect. The announce app data is `[protocol_version, destination_hash, node_name]` (well under the 128-byte limit). `node_name` is the **utility id**; a client rejects an incompatible version from the first byte.
+- Hosts announce under the stable `fbp.runtime` aspect. The announce app data is `[protocol_version, destination_hash, node_name]` (well under the 128-byte limit), serialized as defined in the FBP Protocol 2 AsyncAPI document (§14). `node_name` is the **utility id**; a client rejects an incompatible version from the first byte.
 - Clients show announces they hear as a list. **Pinned hosts come first.** Unpinned hosts are labelled `UNVERIFIED`. Never auto-connect to an unpinned host.
 - After link establishment with a verified identity, the host sends its capability advertisement. Treat it as the in-link truth over any cached announce.
 
@@ -609,7 +611,7 @@ Utilities use a small subset of FBP Protocol 2 over Reticulum:
 - **Used:** the announce, the `0x02` capability advertisement, `0x47` packet send and the `0x49`/`0x4A` stream commands into exported inports, `0x48` status, `0x17` rejections, and read-only component signatures and schemas (`0x20` to `0x24`, `0x28`, `0x29`) to learn exported ports and their schemas.
 - **Not used and refused for client identities in production:** graph CRDT sync and edits, component write and install, run control, breakpoints and process control, telemetry subscription.
 
-The gaps below must be closed in the protocol for this profile to work as written (P1 to P6 in §13). Keep all profile behaviour behind the `host-link` adapter.
+The gaps below must be closed in the protocol for this profile to work as written (P1 to P6 in §13). Until they are: implement the `host-link` adapter against the target behaviour described in §7.6, keep every protocol detail behind the adapter, and report in the README under Assumptions that the utility relies on pending FBP Protocol 2 changes.
 
 ## 12 Decided (D1–D15)
 
@@ -688,17 +690,15 @@ Open questions:
 | O9 | Template repo skeleton and acceptance checklist beyond §15's. |
 | O10 | Validate by building the three example utilities from the spec. After the template repo. |
 
-## 14 Implementation status (non-normative review notes)
+## 14 External references
 
-What follows is a review verdict, not spec rules: what an implementer can and cannot do from this document alone.
+| Reference | Version | Used for |
+|---|---|---|
+| FBP Protocol 2 SPEC and AsyncAPI document | 2.0.0-alpha.1 | Announce app-data serialization (§10.6), capability advertisement, packet and stream commands, component signature hashing (`sig_hash`, §7.6), the utility profile (§11) |
+| Dacar SPEC | 1.0 | Grants, relations, privacy salt, hybrid logical clock, store layout (§10.4, §10.5) |
+| reticulum-js | pin the exact vendored version in `vendor/vendor.json` (§6.6) | Browser and server Reticulum: identities, links, packets, resources (§7.5) |
 
-- **Buildable today:** tier 1 static PWAs over public APIs and IndexedDB. The stack, repo layout, UI rules, security rules, formatting rules and tier selection are concrete enough to follow mechanically. Missing design tokens and adapter schemas must be declared as assumptions/deviations per §2.
-- **Not buildable as specified:** tier 2 transport. The runner library (O1) and the FBP Protocol 2 utility profile (A9, P1–P4) do not exist yet, so `host-link` over Reticulum cannot be implemented without inventing a protocol, which the spec forbids. Dacar grant issuance/verification likewise needs the external Dacar spec, which is not pointed to from here. Tier 3 needs the planned Signal K module.
-- **Missing external references:** no pointers to the FBP Protocol 2 spec document, to the Dacar spec document, or to a specific reticulum-js package/version for vendoring.
-- **Underdefined mechanisms:** how the client graph's `host` node gets its mirrored ports given the fixed registry; the concrete `start`/`shutdown` packet lifecycle in NoFlo; how schemas attach to ports (inline vs `$ref`); announce app-data serialization; the JSON vs MsgPack wire-encoding choice.
-- **Verified-correct details:** destination-hash pinning (hash derives from the host public key), claim code in the URL fragment stripped via `history.replaceState`, PBKDF2 600k iterations / AES-GCM 96-bit nonce per current OWASP guidance, `wss://` requirement for non-loopback from HTTPS pages, 64-byte X25519 ‖ Ed25519 reference key layout.
-- **Minor fixes needed:** §0.6-style checklist wording ("every component") should say "every NoFlo component and graph" to match the UI-testing exemption; verify `environment.time.timezoneOffset` encoding against the Signal K schema before relying on it.
-- **Highest-leverage additions:** a tiny end-to-end worked example (one component + schema + test + small graph + one UI component); runner-library component list with port contracts; external spec pointers (FBP Protocol 2, Dacar, reticulum-js); the design system (tokens, theme classes); adapter port contract schemas written into this document.
+All three are first-party packages: canonically distributed as signed rngit releases, with registries as mirrors (see `~/.pi/agent/context/package-installation.md`).
 
 ## 15 Acceptance checklist
 
