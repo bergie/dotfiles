@@ -51,7 +51,7 @@ Defaults for all code repositories:
 - ✅ **Always**: run the project's formatter after changes to source or tests
 - ✅ **Always**: use `git mv` instead of `mv` for renaming files
 - ✅ **Always**: keep APIs unambiguous — remove legacy paths instead of adding compatibility layers
-- ✅ **Always**: document major changes in the `CHANGELOG.md` (Unreleased segment) where the project maintains one. If you fix or modify something inside the same `Unreleaased` segment where it was added, the fix/change doesn't need a separate entry
+- ✅ **Always**: document major changes in the `CHANGELOG.md` (Unreleased segment) where the project maintains one. The Unreleased segment header must be the literal `## [Unreleased]` — with brackets, exactly this form: release tooling parses the bracketed header, and an unbracketed `## Unreleased` (or any other spelling) breaks it. If you fix or modify something inside the same `Unreleaased` segment where it was added, the fix/change doesn't need a separate entry
 - ✅ **Always**: if an edit or read done via tools like `sed` or `python`, immediately switch to using `read` and `edit` tools
 - ⚠️ **Ask first**: adding dependencies
 - ⚠️ **Ask first**: modifying CI configuration

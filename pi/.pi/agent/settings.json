@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "1.1.0",
+  "lastChangelogVersion": "1.5.0",
   "theme": "light/dark",
   "defaultProvider": "zai",
   "defaultModel": "glm-5.3-flash",
@@ -9,5 +9,8 @@
     "npm:pi-rngit-work-document-skill",
     "npm:@czottmann/pi-cortecs"
   ],
-  "enableInstallTelemetry": false
+  "enableInstallTelemetry": false,
+  "extensionChangelogVersions": {
+    "{\"source\":\"npm:@czottmann/pi-cortecs\",\"scope\":\"user\"}": "2.1.0"
+  }
 }
