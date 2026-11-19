@@ -1,0 +1,96 @@
+#!/data/data/com.termux/files/usr/bin/sh
+# termux-file-editor - handler for files shared to Termux via the Android
+# share intent.
+#
+# Termux saves a shared file to a temporary location and runs this script
+# with the file path as the only argument. Tarballs are extracted into
+# ~/downloads/<archive-name>/, anything else falls back to $EDITOR so the
+# usual "share to edit" behaviour keeps working.
+#
+# Wire it up in ~/.termux/termux.properties with:
+#   termux-file-editor = /data/data/com.termux/files/home/.local/bin/termux-file-editor
+# then run `termux-reload-settings`.
+
+set -eu
+
+DOWNLOADS="${DOWNLOADS:-$HOME/downloads}"
+
+notify() {
+  # Best effort: needs the Termux:API companion app to answer, and a missing
+  # or stuck API must never block the handler.
+  if command -v termux-toast >/dev/null 2>&1 && command -v timeout >/dev/null 2>&1; then
+    timeout 3 termux-toast "$1" >/dev/null 2>&1 || true
+  fi
+}
+
+# A file counts as a tarball when its name says so, or when it carries the
+# ustar magic at offset 257 (files shared without a proper extension).
+is_tarball() {
+  case $(basename "$1") in
+    *.tar|*.tgz|*.tbz|*.tbz2|*.txz|*.tzst|*.tar.gz|*.tar.bz2|*.tar.xz|*.tar.zst|*.tar.lz|*.tar.lzma)
+      return 0
+      ;;
+  esac
+  # Content sniff for shared files without a telling name. GNU tar
+  # auto-detects compression, so this also sees through .gz/.xz/...
+  tar -tf "$1" >/dev/null 2>&1
+}
+
+# Strip compression and tar suffixes: foo.tar.gz -> foo, foo.tgz -> foo.
+stem_of() {
+  stem=$1
+  while :; do
+    case $stem in
+      *.tar|*.tgz|*.tbz|*.tbz2|*.txz|*.tzst|*.tar.gz|*.tar.bz2|*.tar.xz|*.tar.zst|*.tar.lz|*.tar.lzma)
+        stem=${stem%.*}
+        ;;
+      *)
+        break
+        ;;
+    esac
+  done
+  if [ -z "$stem" ] || [ "$stem" = "$1" ]; then
+    stem=archive
+  fi
+  printf '%s\n' "$stem"
+}
+
+extract() {
+  file=$1
+  name=$(basename "$file")
+  stem=$(stem_of "$name")
+  mkdir -p "$DOWNLOADS"
+  # GNU tar auto-detects the compression format on -x; --one-top-level keeps
+  # the contents contained in ~/downloads/<stem>/. Members with absolute
+  # paths or '..' are refused by default.
+  if tar -xf "$file" -C "$DOWNLOADS" --one-top-level="$stem"; then
+    notify "Extracted $name to ~/downloads/$stem"
+  else
+    notify "Failed to extract $name"
+    exit 1
+  fi
+}
+
+edit() {
+  file=$1
+  exec "${EDITOR:-vi}" "$file"
+}
+
+main() {
+  if [ $# -lt 1 ]; then
+    echo "usage: termux-file-editor FILE" >&2
+    exit 64
+  fi
+  file=$1
+  if [ ! -f "$file" ]; then
+    notify "Shared file not found: $file"
+    exit 66
+  fi
+  if is_tarball "$file"; then
+    extract "$file"
+  else
+    edit "$file"
+  fi
+}
+
+main "$@"

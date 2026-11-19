@@ -79,6 +79,27 @@ test -L $HOME/.pi && echo ".pi ✓"
 test -f $HOME/.pi/agent/extensions/title-state.ts && echo "pi title-state extension ✓"
 
 echo ""
+echo "=== Termux file editor ==="
+FILE_EDITOR=$HOME/.local/bin/termux-file-editor
+if [ -x "$FILE_EDITOR" ]; then
+  tmp=$(mktemp -d)
+  printf 'hello' > "$tmp/hello.txt"
+  tar -czf "$tmp/fixture.tar.gz" -C "$tmp" hello.txt
+  cp "$tmp/fixture.tar.gz" "$tmp/fixture.dat"
+  DOWNLOADS="$tmp/out" sh "$FILE_EDITOR" "$tmp/fixture.tar.gz"
+  test "$(cat "$tmp/out/fixture/hello.txt")" = 'hello' && echo "extracts *.tar.gz by extension ✓"
+  # Content sniffing: gzipped tarball shared under a nameless extension
+  DOWNLOADS="$tmp/out" sh "$FILE_EDITOR" "$tmp/fixture.dat"
+  test "$(cat "$tmp/out/fixture/hello.txt")" = 'hello' && echo "extracts tarballs by content sniff ✓"
+  # Non-tarball falls back to $EDITOR
+  printf 'plain' > "$tmp/notes.txt"
+  EDITOR=true DOWNLOADS="$tmp/out" sh "$FILE_EDITOR" "$tmp/notes.txt" && echo "non-tarball falls back to $EDITOR ✓"
+  rm -rf "$tmp"
+else
+  echo "termux-file-editor not installed (skipped)"
+fi
+
+echo ""
 echo "=== Git Submodule ==="
 test -d $HOME/dotfiles/nvim/.local/share/nvim/site/pack/plugins/start/tokyonight && echo "tokyonight submodule ✓"
 

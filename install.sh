@@ -4,3 +4,4 @@ stow fish
 stow git
 stow nvim
 stow pi
+stow termux
