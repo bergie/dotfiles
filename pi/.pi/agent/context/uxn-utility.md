@@ -8,8 +8,10 @@ This profile replaces the web UI of the original Utility Spec (Web Components PW
 
 Related context documents, to load alongside this one:
 
-- `uxn-app-guidelines.md`: Uxn/Varvara App Guidelines: Small Screens, Keyboard-First (A30). **Authoritative for everything inside the ROM**: layout tiers from 320x240 upward, keyboard-first input, themes and visual style, metadata and manifest, redraw rules, the plain-text storage rules (its §7.2) that §7.6 builds on, and its testing checklist. This spec does not repeat those rules. Where the two overlap, the guidelines win for the ROM and this spec wins for the host side and the boundary between them.
-- `factotum-spec.md`: Varvara Factotum & Multi-Principal Capability Specification (A35). The reference for people *implementing* a Factotum host. It is not needed to write a ROM: the usage side, the part a ROM author needs, is complete in §7.14.
+- `uxn-app.md`: Uxn/Varvara App Guidelines: Small Screens, Keyboard-First (A30). **Authoritative for everything inside the ROM**: layout tiers from 320x240 upward, keyboard-first input, themes and visual style, metadata and manifest, redraw rules, the plain-text storage rules (its §7.2) that §7.6 builds on, and its testing checklist. This spec does not repeat those rules. Where the two overlap, the guidelines win for the ROM and this spec wins for the host side and the boundary between them.
+- `varvara.md`: Varvara device reference (80K), synthesized from the wiki spec for offline use. Port layouts and exact device semantics — the File device behind the mailbox protocol (§7.6), Screen size ports (§7.2 of the guidelines), Controller button bits, the metadata and Datetime ports. Consult it instead of fetching the wiki when a device detail is in question; the wiki page remains the source of truth.
+- The Factotum Spec — Varvara Factotum & Multi-Principal Capability Specification, `factotum-like.md` in the Volvelle documentation (A35). The reference for people *implementing* a Factotum host. It is not needed to write a ROM: the usage side, the part a ROM author needs, is complete in §7.14.
+- The Platform Component Set & RRCP Spool Specification, `components.md` in the Volvelle documentation (v0.1 draft): the audited platform component set behind §7.3 (O1/O2), with exact MicroFlo/NoFlo port types, the mailbox and formatting components, the Reticulum verb components, and the RRCP spool of §10.11 (O23). Drafted alongside this spec; reconcile its `platform/error` envelope and RRCP grade semantics with §7.3 before relying on them.
 - `~/.pi/agent/context/component-basics.md` (NoFlo 2.x patterns), `~/.pi/agent/context/package-installation.md` (first-party package distribution), `~/.pi/agent/context/signalk-visuals.md` (Signal K UI rules; only its time, staleness and status-text rules apply here, see §7.2).
 
 The decisions log at the end (§12–§13) records which rules were decided, which were assumed for v0.1, and what is still open. Do not re-open decisions listed there; assumption tags `(A#)` are listed in §13: follow them and mention in your report which you relied on. A1 to A18 come from the original spec, some amended; A19 and up belong to this profile.
@@ -481,7 +483,7 @@ The `companion` node is a hand-written component in the runner library, with its
 
 A ROM holds no key material and implements no cryptography. When it needs a signature, a verification, a sealed or unsealed message, or a capability check, it asks the host through **Factotum**: a synthetic filesystem served over the standard File device, in the style of Plan 9's factotum. The ROM never reaches Reticulum, so it cannot sign or encrypt for it itself; Factotum is how it takes part in the mesh without that.
 
-This section is the complete usage reference for ROM authors. `factotum-spec.md` (A35) is the reference for people implementing a Factotum host and is not needed to write a ROM.
+This section is the complete usage reference for ROM authors. The Factotum Spec (A35, in the Volvelle documentation) is the reference for people implementing a Factotum host and is not needed to write a ROM.
 
 **Division of labour.**
 
@@ -654,7 +656,7 @@ The sample hardcodes `user=me` for brevity; real ROMs take the alias from the `f
 
 **Provenance and authority (A37), for the record.** The ROM cannot see or change this; it matters because it explains the answers above. When the launcher loads a ROM, the host builds a provenance record: the user's identity, the device's identity, the SHA-256 of the ROM, and the author's public key if the release is signed. The ROM's effective authority is the intersection of the user's policy, the author's `needs` and the device context; a ROM may narrow it and never widen it. An unsigned ROM is pinned to its hash and declares no needs, so every capability it requests needs confirmation or is denied. The prompt is drawn by the privileged shell (the launcher), never by the ROM, so a ROM cannot fake one. The same record decides which mailboxes the `mailbox` adapter provisions (§10.4): one record, two doors, files for data and Factotum for cryptography.
 
-**Host rules (for implementers).** Details are in `factotum-spec.md`. No key material is ever visible in the ROM's namespace. Session ids are validated against `[0-9a-f]`. Buffers and ephemeral keys are zeroized on close, reset and ROM termination, and sessions are reclaimed when the ROM ends. On the device, hosts cap concurrent sessions (at least four) and the streaming buffer (at least 4096 bytes). Host-side graph components use the host's own crypto service under the same policy; Factotum is the ROM-facing face of it.
+**Host rules (for implementers).** Details are in the Factotum Spec (in the Volvelle documentation). No key material is ever visible in the ROM's namespace. Session ids are validated against `[0-9a-f]`. Buffers and ephemeral keys are zeroized on close, reset and ROM termination, and sessions are reclaimed when the ROM ends. On the device, hosts cap concurrent sessions (at least four) and the streaming buffer (at least 4096 bytes). Host-side graph components use the host's own crypto service under the same policy; Factotum is the ROM-facing face of it.
 
 ## 8 Tier selection
 
@@ -988,12 +990,12 @@ Assumptions made for v0.1 (confirm or override). A1 to A18 come from the origina
 | A27 | Every host graph exports the standard ports `status`, `console`, `prefs`, `prefs-set`, `outbox-state`, `export` and `import`. UI preferences live on the host, not in ROM files. |
 | A28 | ROM-facing payloads are flat: strings, integers, booleans, lists (repeated keys) and tables (repeated keys with tab-separated columns). Display values arrive pre-formatted. Text is printable ASCII by default. |
 | A29 | One ROM per exchange root. |
-| A30 | The Uxn App Guidelines are loaded alongside this spec as `uxn-app-guidelines.md`. |
+| A30 | The Uxn App Guidelines are loaded alongside this spec as `uxn-app.md`. |
 | A31 | The old `host-link` semantics (retained state ports, request ids, at-most-once delivery, blobs by reference) apply between hosts. |
 | A32 | Tier 3 is a Signal K plugin backend acting as the companion; the ROM and the device never talk to Signal K. |
 | A33 | *Amended by §7.14.* ROM authors are untrusted. Bundles are distributed as signed rngit releases. A ROM's authority is the intersection of user policy, the signed manifest's `needs` and the device context; the grantee for a signed ROM is the release signer, and an unsigned ROM is pinned to its hash and needs confirmation. |
 | A34 | On the device, radios are live only when needed, except LoRa listening. |
-| A35 | The Factotum spec (`factotum-spec.md`) is the implementer's reference. The usage side for ROM authors lives in §7.14, so ROM work does not need it loaded. |
+| A35 | The Factotum spec (`factotum-like.md` in the Volvelle documentation) is the implementer's reference. The usage side for ROM authors lives in §7.14, so ROM work does not need it loaded. |
 | A36 | Factotum appears as `factotum/` inside the exchange root, not at `/sys/factotum`. A ROM tolerates its absence. |
 | A37 | One provenance record (user, device, ROM hash, author) and the intersection rule decide both mailbox exposure and Factotum capabilities. The confirmation prompt is drawn by the privileged shell. |
 | A38 | The spool hooks of §10.11 are in scope; the spool format and flush policy are not. |
@@ -1019,8 +1021,8 @@ Open questions:
 
 | # | Question |
 |---|---|
-| O1 | Runner library: name, exact component list, versioning. Now also covers the mailbox adapter, standard ports, emulator launchers and the browser shell. Needed before the template repo. |
-| O2 | Adapter port contracts (mailbox, storage, files, clock, reticulum, host-link, signalk). Only named in v0.1; schemas not yet defined. |
+| O1 | Runner library: name, exact component list, versioning. Now also covers the mailbox adapter, standard ports, emulator launchers and the browser shell. Needed before the template repo. The component list itself is drafted in the Volvelle documentation (`components.md`); naming, versioning and shipping are still open. |
+| O2 | Adapter port contracts (mailbox, storage, files, clock, reticulum, host-link, signalk). Only named in v0.1; schemas not yet defined. The Volvelle documentation's component catalog defines wire types for the mailbox and Reticulum adapters; full schemas still open. |
 | O3 | SK conventions: auth failure handling; how a plugin backend reaches the shared Reticulum connection plugin; how a device gets Signal K data through the companion (A32). |
 | O4 | Relation-to-capability table for the utility profile, including what a local ROM's grants expose. Depends on P1. |
 | O5 | Large-payload convention (Reticulum Resource references). Depends on P5. |
@@ -1031,7 +1033,7 @@ Open questions:
 | O10 | Validate by building the three example utilities from the spec, as ROM plus graphs. After the template repo. |
 | O11 | Characters and fonts: printable ASCII only, or UTF-8 with a font. How the host sanitizes display strings. |
 | O12 | A standard way for a host to prompt an immediate poll (a Console byte, or something else), and whether 1 s is the right default poll rate on the device. |
-| O13 | Whether a ROM can create directories at run time (Guidelines §9). Until then, the host creates them. |
+| O13 | Whether a ROM can create directories at run time (Guidelines §7.2). Until then, the host creates them. |
 | O14 | Flash wear and the volatile exchange root on the T-Deck: what survives power loss, and how the host restores mailboxes at boot. |
 | O15 | Device identity storage and backup: where the secret lives on the T-Deck, the cost of the key derivation on its CPU, and where a raw export goes (never the exchange root). |
 | O16 | Pairing on a keyboard device: typing a 32-character destination hash, or deriving a short fingerprint to compare instead. |
@@ -1041,16 +1043,17 @@ Open questions:
 | O20 | Whether `policy.ndb` or the Dacar grants are the source of truth for a ROM's authority, and how the two stay consistent. |
 | O21 | The Ed25519 signing convention in Factotum. It signs a SHA-256 digest as the message, so its signatures differ from plain Ed25519 over the message, which is what RNS and LXMF verify. Define it explicitly and add domain separation (scope in the signed bytes, or per-scope keys). |
 | O22 | `kosync` returns the MD5 auth token in `ctl`, which contradicts zero secret exposure. Drop it for ROMs, or return only a per-request proof. Here the host's HTTP adapter holds the credential. |
-| O23 | A host-networking document: spool format, flush policy, the radio power capability, and UUCP/NNCP-style forwarding between hosts. |
+| O23 | A host-networking document: spool format, flush policy, the radio power capability, and UUCP/NNCP-style forwarding between hosts. The spool format and radio capability are drafted as the RRCP components in the Volvelle documentation (`components.md`); flush policy and forwarding remain open. |
 | O24 | Per-operation Dacar relations (`sign`, `decrypt`) and key aliases scoped per utility; the documented relations are `read`, `write` and `admin`. |
 
 ## 14 External references
 
 | Reference | Version | Used for |
 |---|---|---|
-| Varvara specification (wiki.xxiivv.com/site/varvara.html) and application support standards (libraries.html) | 80K | The File device, Screen, Controller, metadata, themes, manifest and clipboard conventions (§6.2, §7.6) |
+| Varvara specification (wiki.xxiivv.com/site/varvara.html) and application support standards (libraries.html) | 80K | The File device, Screen, Controller, metadata, themes, manifest and clipboard conventions (§6.2, §7.6). Offline synthesis: `~/.pi/agent/context/varvara.md` |
 | Uxn/Varvara App Guidelines | pinned alongside this spec (A30) | Everything inside the ROM |
-| Varvara Factotum & Multi-Principal Capability Specification | 1.0.0-draft (A35) | Cryptographic operations for ROMs, provenance and policy (§7.14) |
+| Varvara Factotum & Multi-Principal Capability Specification | 1.0.0-draft (A35) | Cryptographic operations for ROMs, provenance and policy (§7.14). In the Volvelle documentation (`factotum-like.md`) |
+| Platform Component Set & RRCP Spool Specification | v0.1 draft | The audited platform component set (§7.3, O1/O2) and the RRCP spool (§10.11, O23). In the Volvelle documentation (`components.md`) |
 | Drifblim (Uxntal assembler) | pin the exact vendored version in `vendor/vendor.json` | Assembling the ROM (§6.3) |
 | MicroFlo | pinned by the platform component set | Running host graphs on the T-Deck Max |
 | FBP Protocol 2 SPEC and AsyncAPI document | 2.0.0-alpha.1 | Announce app-data serialization (§10.6), capability advertisement, packet and stream commands, component signature hashing (`sig_hash`, §7.13), the utility profile (§11) |

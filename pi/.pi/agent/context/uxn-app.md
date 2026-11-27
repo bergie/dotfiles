@@ -1,6 +1,6 @@
 # Uxn/Varvara App Guidelines: Small Screens, Keyboard-First
 
-*Status: proposed convention, not an official Varvara standard. Written for ROM authors and for LLM coding agents writing Uxntal. Where something depends on the emulator or device, it is marked as such.*
+*Status: proposed convention, not an official Varvara standard. Written for ROM authors and for LLM coding agents writing Uxntal. Where something depends on the emulator or device, it is marked as such. Device-level details — port layouts, File device semantics, controller bits, the metadata port — are condensed in `varvara.md` in this context folder.*
 
 ## 1. Purpose and design targets
 
@@ -221,9 +221,7 @@ Run every ROM through all of these before release:
 - [ ] Every function reachable from the keyboard
 - [ ] No redrawing or file access when idle
 - [ ] On the real device, including modifier-key behaviour
-
-* [ ] Metadata present: name, description, Varvara version and icon, registered as the first instruction at reset
-
+- [ ] Metadata present: name, description, Varvara version and icon, registered as the first instruction at reset
 - [ ] User data stored as one plain text record per file under the ROM's own directory, with incomplete files skipped on read
 - [ ] Every routine declares a valid `( before -- after )` stack signature
 - [ ] Model and parser routines pass headless TAP tests under `uxncli`
