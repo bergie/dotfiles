@@ -186,7 +186,29 @@ Store data as plain text files, one record per file, in a Maildir-style layout: 
 
 **Host notes (for implementers).** A host may offer guarantees the spec does not require, as long as no ROM depends on them. The most useful is atomic replace: a write with `File/append` at `0x00` replaces the file's contents, and writing to `File/name` closes the open file, so a host can stage the write in a temporary file and rename it over the original at that close. ROMs see no difference, and a crash mid-write leaves the old file intact. Rename or make-directory calls could be added on one of the two reserved devices, but a ROM that uses them will not run on other hosts, so keep them out of portable ROMs. Varvara also defines two File devices, which lets a ROM read from one collection while writing to another.
 
-## 8. Testing checklist
+## 8. Authoring and tooling discipline
+
+These conventions keep source files maintainable for humans and reduce context size, stack-tracking errors, and retry loops for LLM coding agents.
+
+### 8.1 Modularity and file size
+
+- **Keep `.tal` modules small (under ~200 lines).** Split UI rendering, application model/state, and File/device I/O into separate files joined by `~include` directives. Small files let both human authors and coding agents read and patch a single concern without loading the whole ROM.
+- **Keep model, view, and I/O in separate modules.** This reinforces section 2 and makes state logic testable without a Screen device.
+- **Generate bulk data externally.** Never hand-author or LLM-generate large `.chr`/`.icn` sprite tables, font bitmaps, or lookup tables inline. Emit them from small, deterministic host scripts (Node.js or Python) and include the resulting binary or literal file.
+
+### 8.2 Stack signatures and assembly hygiene
+
+- **Annotate every routine with a Forth-style stack signature**, e.g. `@draw-cell ( x* y* glyph* -- )`. Treat the signature as a contract: every return path (`JMP2r`) must leave the working and return stacks matching the declaration.
+- **Avoid zero-page rewinding after code emission.** Define all zero-page variables (`|0000`) and device port constants before `|0100`. Never rewind the program counter back into zero-page after emitting instructions, as it silently overwrites ROM bytes.
+- **Prefer explicit relative conditional jumps (`?&label`)** over manual address arithmetic on `JCN`.
+
+### 8.3 Automated testing with TAP
+
+- **Verify non-UI logic headless via TAP.** Write unit tests using the Test Anything Protocol (`ok` / `not ok` lines printed to Console/write `#18 DEO`, exiting via System/state `#010f DEO` on failure) and run them under `uxncli`.
+- **Test modules in isolation.** Build lightweight test harnesses that `~include` only the target module and a minimal `tap.tal` helper rather than booting the full UI ROM.
+- **Wrap assemble-and-test in a single quiet command.** Run `uxnasm` followed by `uxncli`, suppressing output on pass and emitting only the compiler error or failing TAP diagnostic on failure.
+
+## 9. Testing checklist
 
 Run every ROM through all of these before release:
 
@@ -203,14 +225,6 @@ Run every ROM through all of these before release:
 * [ ] Metadata present: name, description, Varvara version and icon, registered as the first instruction at reset
 
 - [ ] User data stored as one plain text record per file under the ROM's own directory, with incomplete files skipped on read
+- [ ] Every routine declares a valid `( before -- after )` stack signature
+- [ ] Model and parser routines pass headless TAP tests under `uxncli`
 
-## 9. Open questions
-
-- How the T-Deck Max keyboard reports modifiers and special keys to a Varvara ROM.
-- Whether and how the target host notifies or honours screen resizes.
-- Whether to standardise tier thresholds across all ROMs, or leave them to each app.
-- Whether to propose these as a community convention, for instance on the Uxn mailing list, once validated on hardware.
-
-* Which metadata field identifiers to use for extra information such as a minimum screen size or a keyboard requirement. The spec leaves other identifiers free (56, 83, a0 and f0 are taken), so pick ones unlikely to clash and consider proposing them upstream.
-
-- Whether a ROM can create directories at run time, since the spec is silent on it. Rename is not in the spec (80K), and the Maildir adaptation in 7.2 avoids it.
